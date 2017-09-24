@@ -7,7 +7,7 @@ cdef class _CUDADevice(_Device):
 
     @staticmethod
     def num_devices():
-        CUDADevice_num_devices()
+        return CUDADevice_num_devices()
 
     def __cinit__(self, unsigned device_id, rng_seed = None):
         if rng_seed == None:

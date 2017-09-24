@@ -33,12 +33,12 @@ cdef class _Parameter:
         else:
             return wrapParameter(new Parameter(name, shape.ptr, value, device.ptr[0]))
 
-    #@staticmethod
-    #def new_from_initializer(string name, _Shape shape, _Initializer init, _Device device = None):
-        #if device == None:
-            #return wrapParameter(Parameter(name, shape.ptr, init.ptr, (<_Device> _Device.get_default_device()).ptr[0]))
-        #else:
-            #return wrapParameter(Parameter(name, shape.ptr, init.ptr, device.ptr[0]))
+    @staticmethod
+    def new_from_initializer(string name, _Shape shape, _Initializer init, _Device device = None):
+        if device == None:
+            return wrapParameter(new Parameter(name, shape.ptr, init.ptr[0], (<_Device> _Device.get_default_device()).ptr[0]))
+        else:
+            return wrapParameter(new Parameter(name, shape.ptr, init.ptr[0], device.ptr[0]))
 
     def valid(self):
         return self.ptr.valid()
@@ -47,9 +47,9 @@ cdef class _Parameter:
         self.ptr.reset_value(value)
         return
 
-    #def reset_value_by_initializer(self, _Initializer init):
-        #self.ptr.reset_value(init.ptr)
-        #return
+    def reset_value_by_initializer(self, _Initializer init):
+        self.ptr.reset_value(init.ptr[0])
+        return
 
     def reset_gradient(self):
         self.ptr.reset_gradient()

@@ -45,10 +45,21 @@ ext_modules=[
               language="c++",
               libraries=["primitiv"]
     ),
+    Extension("primitiv.initializer",
+              sources=["primitiv/initializer.pyx"],
+              language="c++",
+              libraries=["primitiv"]
+    ),
+    Extension("primitiv.initializers.initializer_impl",
+              sources=["primitiv/initializers/initializer_impl.pyx"],
+              language="c++",
+              libraries=["primitiv"]
+    ),
 ]
 
 setup(
     ext_modules = cythonize(ext_modules),
     packages = ["primitiv",
-                "primitiv.functions"]
+                "primitiv.functions",
+                "primitiv.initializers"]
 )
