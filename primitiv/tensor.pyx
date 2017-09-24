@@ -16,14 +16,11 @@ from primitiv.tensor cimport (Tensor,
 
 cdef class _Tensor:
 
-    def __cinit__(self, src = None):
+    def __init__(self, src = None):
         if src == None:
             self.ptr = Tensor()
         else:
             self.ptr = Tensor((<_Tensor> src).ptr)
-        return
-
-    def __dealloc__(self):
         return
 
     def valid(self):

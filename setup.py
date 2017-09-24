@@ -24,8 +24,31 @@ ext_modules=[
               sources=["primitiv/cpu_device.pyx"],
               language="c++",
               libraries=["primitiv"]
-    )
+    ),
+    #Extension("primitiv.cuda_device",
+              #sources=["primitiv/cuda_device.pyx"],
+              #language="c++",
+              #libraries=["primitiv"]
+    #),
+    Extension("primitiv.function",
+              sources=["primitiv/function.pyx"],
+              language="c++",
+              libraries=["primitiv"]
+    ),
+    Extension("primitiv.functions.function_impl",
+              sources=["primitiv/functions/function_impl.pyx"],
+              language="c++",
+              libraries=["primitiv"]
+    ),
+    Extension("primitiv.parameter",
+              sources=["primitiv/parameter.pyx"],
+              language="c++",
+              libraries=["primitiv"]
+    ),
 ]
 
-setup(ext_modules = cythonize(ext_modules),
-      packages = ["primitiv"])
+setup(
+    ext_modules = cythonize(ext_modules),
+    packages = ["primitiv",
+                "primitiv.functions"]
+)

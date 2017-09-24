@@ -7,14 +7,11 @@ from primitiv.shape cimport Shape
 
 cdef class _Shape:
 
-    def __cinit__(self, dims = None, unsigned batch = 1):
+    def __init__(self, dims = None, unsigned batch = 1):
         if dims == None:
             self.ptr = Shape()
         else:
             self.ptr = Shape(<vector[unsigned]> dims, <unsigned> batch)
-
-    def __dealloc__(self):
-        return
 
     def depth(self):
         return self.ptr.depth()

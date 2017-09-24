@@ -1,14 +1,9 @@
 from libcpp.vector cimport vector
-from libcpp.string cimport string
-from libcpp cimport bool
-from libcpp.cast cimport const_cast
 
 from primitiv.device cimport get_default_device as Device_get_default_device
 from primitiv.device cimport set_default_device as Device_set_default_device
 from primitiv.shape cimport _Shape
 from primitiv.tensor cimport wrapTensor, _Tensor
-
-from primitiv.device cimport Device
 
 
 cdef class _Device:
