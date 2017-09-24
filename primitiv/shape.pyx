@@ -32,7 +32,7 @@ cdef class _Shape:
         return self.ptr.size()
 
     def __str__(self):
-        return self.ptr.to_string()
+        return self.ptr.to_string().decode("utf-8")
 
     def __getitem__(self, unsigned i):
         return self.ptr[i]
