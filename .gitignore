@@ -1,0 +1,3 @@
+build
+primitiv/*.cpp
+!tensor_op.*
