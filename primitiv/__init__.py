@@ -4,6 +4,8 @@ from primitiv.device import _Device as Device
 from primitiv.cpu_device import _CPUDevice as CPUDevice
 from primitiv.function import _Function as Function
 from primitiv.parameter import _Parameter as Parameter
+from primitiv.graph import _Node as Node
+from primitiv.graph import _Graph as Graph
 from primitiv import functions
 from primitiv import initializers
 
@@ -14,8 +16,8 @@ __all__ = [
     "Device",
     "Function",
     "functions",
-    #"Node",
-    #"Graph",
+    "Node",
+    "Graph",
     "Initializer",
     "initializers",
     #"operators",

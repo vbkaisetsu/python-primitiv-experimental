@@ -55,6 +55,11 @@ ext_modules=[
               language="c++",
               libraries=["primitiv"]
     ),
+    Extension("primitiv.graph",
+              sources=["primitiv/graph.pyx"],
+              language="c++",
+              libraries=["primitiv"]
+    ),
 ]
 
 setup(
