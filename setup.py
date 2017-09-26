@@ -70,6 +70,11 @@ ext_modules=[
               language="c++",
               libraries=["primitiv"]
     ),
+    Extension("primitiv.operator",
+              sources=["primitiv/operator.pyx"],
+              language="c++",
+              libraries=["primitiv"]
+    ),
 ]
 
 setup(
