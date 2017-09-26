@@ -60,11 +60,23 @@ ext_modules=[
               language="c++",
               libraries=["primitiv"]
     ),
+    Extension("primitiv.trainer",
+              sources=["primitiv/trainer.pyx"],
+              language="c++",
+              libraries=["primitiv"]
+    ),
+    Extension("primitiv.trainers.trainer_impl",
+              sources=["primitiv/trainers/trainer_impl.pyx"],
+              language="c++",
+              libraries=["primitiv"]
+    ),
 ]
 
 setup(
     ext_modules = cythonize(ext_modules),
     packages = ["primitiv",
                 "primitiv.functions",
-                "primitiv.initializers"]
+                "primitiv.initializers",
+                "primitiv.trainers",
+    ]
 )
