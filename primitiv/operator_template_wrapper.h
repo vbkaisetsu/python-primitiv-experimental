@@ -416,3 +416,5 @@ inline Tensor Tensor_dropout(const Tensor &x, float rate, bool enabled) {
 }
 
 }
+
+#endif
