@@ -109,11 +109,13 @@ cdef class _Graph:
     def __init__(self):
         self.ptr = new Graph()
 
-    def get_default_graph(self):
-        return wrapGraph(&self.ptr.get_default_graph())
+    @staticmethod
+    def get_default_graph():
+        return wrapGraph(&get_default_graph())
 
-    def set_default_graph(self, _Graph g):
-        self.ptr.set_default_graph(g.ptr[0])
+    @staticmethod
+    def set_default_graph(_Graph g):
+        set_default_graph(g.ptr[0])
         return
 
     def add_function(self, _Function func, args):

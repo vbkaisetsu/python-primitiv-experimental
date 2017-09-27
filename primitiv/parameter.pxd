@@ -11,33 +11,33 @@ from primitiv.initializer cimport Initializer, _Initializer
 cdef extern from "primitiv/parameter.h" namespace "primitiv":
     cdef cppclass Parameter:
         Parameter(Parameter &&src)
-        Parameter()
-        Parameter(const string &name, const Shape &shape, Device &device)
-        Parameter(const string &name, const Shape &shape, const vector[float] &value, Device &device)
-        Parameter(const string &name, const Shape &shape, const Initializer &init, Device &device)
-        bool valid()
-        void reset_value(const vector[float] &value)
-        void reset_value(const Initializer &init)
-        void reset_gradient()
-        void add_stats(const string &name, const Shape &shape)
-        bool has_stats(const string &name)
-        const string &name()
-        const Shape &shape()
-        Device &device()
-        Tensor &value()
-        Tensor &gradient()
-        Tensor &stats(const string &name)
-        void save(const string &path, bool with_stats)
+        Parameter() except +
+        Parameter(const string &name, const Shape &shape, Device &device) except +
+        Parameter(const string &name, const Shape &shape, const vector[float] &value, Device &device) except +
+        Parameter(const string &name, const Shape &shape, const Initializer &init, Device &device) except +
+        bool valid() except +
+        void reset_value(const vector[float] &value) except +
+        void reset_value(const Initializer &init) except +
+        void reset_gradient() except +
+        void add_stats(const string &name, const Shape &shape) except +
+        bool has_stats(const string &name) except +
+        const string &name() except +
+        const Shape &shape() except +
+        Device &device() except +
+        Tensor &value() except +
+        Tensor &gradient() except +
+        Tensor &stats(const string &name) except +
+        void save(const string &path, bool with_stats) except +
 
 cdef extern from "primitiv/parameter.h" namespace "primitiv::Parameter":
-    Parameter load(const string &path, bool with_stats, Device &device)
+    Parameter load(const string &path, bool with_stats, Device &device) except +
 
 
 cdef class _Parameter:
     cdef Parameter *ptr
 
 
-cdef inline _Parameter wrapParameter(Parameter *ptr):
+cdef inline _Parameter wrapParameter(Parameter *ptr) except +:
     cdef _Parameter parameter = _Parameter.__new__(_Parameter)
     parameter.ptr = ptr
     return parameter

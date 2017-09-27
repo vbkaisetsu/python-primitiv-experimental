@@ -9,46 +9,49 @@ from primitiv.function cimport Function
 
 cdef extern from "primitiv/graph.h" namespace "primitiv":
     cdef cppclass Node:
-        Node(Node &&src)
-        Node()
-        bool valid()
-        Graph &graph()
-        unsigned function_id()
-        unsigned value_id()
-        const Shape &shape()
-        Device &device()
-        vector[float] to_vector()
+        Node(Node &&src) except +
+        Node() except +
+        bool valid() except +
+        Graph &graph() except +
+        unsigned function_id() except +
+        unsigned value_id() except +
+        const Shape &shape() except +
+        Device &device() except +
+        vector[float] to_vector() except +
 
 
 cdef extern from "node_op.h" namespace "python_primitiv_node":
-    cdef Node op_node_pos(const Node &x)
-    cdef Node op_node_neg(const Node &x)
-    cdef Node op_node_add(const Node &x, float k)
-    cdef Node op_node_add(float k, const Node &x)
-    cdef Node op_node_add(const Node &a, const Node &b)
-    cdef Node op_node_sub(const Node &x, float k)
-    cdef Node op_node_sub(float k, const Node &x)
-    cdef Node op_node_sub(const Node &a, const Node &b)
-    cdef Node op_node_mul(const Node &x, float k)
-    cdef Node op_node_mul(float k, const Node &x)
-    cdef Node op_node_mul(const Node &a, const Node &b)
-    cdef Node op_node_div(const Node &x, float k)
-    cdef Node op_node_div(float k, const Node &x)
-    cdef Node op_node_div(const Node &a, const Node &b)
+    cdef Node op_node_pos(const Node &x) except +
+    cdef Node op_node_neg(const Node &x) except +
+    cdef Node op_node_add(const Node &x, float k) except +
+    cdef Node op_node_add(float k, const Node &x) except +
+    cdef Node op_node_add(const Node &a, const Node &b) except +
+    cdef Node op_node_sub(const Node &x, float k) except +
+    cdef Node op_node_sub(float k, const Node &x) except +
+    cdef Node op_node_sub(const Node &a, const Node &b) except +
+    cdef Node op_node_mul(const Node &x, float k) except +
+    cdef Node op_node_mul(float k, const Node &x) except +
+    cdef Node op_node_mul(const Node &a, const Node &b) except +
+    cdef Node op_node_div(const Node &x, float k) except +
+    cdef Node op_node_div(float k, const Node &x) except +
+    cdef Node op_node_div(const Node &a, const Node &b) except +
 
 
 cdef extern from "primitiv/graph.h" namespace "primitiv":
     cdef cppclass Graph:
-        Graph()
-        Graph &get_default_graph()
-        void set_default_graph(Graph &g)
-        Node add_function(unique_ptr[Function] &&func, vector[Node] &args)
-        const Tensor &forward(const Node &node)
-        void backward(const Node &node)
-        const Shape &get_shape(const Node &node)
-        Device &get_device(const Node &node)
-        void dump()
-        unsigned num_functions()
+        Graph() except +
+        Node add_function(unique_ptr[Function] &&func, vector[Node] &args) except +
+        const Tensor &forward(const Node &node) except +
+        void backward(const Node &node) except +
+        const Shape &get_shape(const Node &node) except +
+        Device &get_device(const Node &node) except +
+        void dump() except +
+        unsigned num_functions() except +
+
+
+cdef extern from "primitiv/graph.h" namespace "primitiv::Graph":
+    Graph &get_default_graph() except +
+    void set_default_graph(Graph &g) except +
 
 
 cdef class _Node:
@@ -59,13 +62,13 @@ cdef class _Graph:
     cdef Graph *ptr
 
 
-cdef inline _Node wrapNode(Node ptr):
+cdef inline _Node wrapNode(Node ptr) except +:
     cdef _Node node = _Node.__new__(_Node)
     node.ptr = ptr
     return node
 
 
-cdef inline _Graph wrapGraph(Graph *ptr):
+cdef inline _Graph wrapGraph(Graph *ptr) except +:
     cdef _Graph graph = _Graph.__new__(_Graph)
     graph.ptr = ptr
     return graph

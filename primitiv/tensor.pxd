@@ -31,7 +31,7 @@ cdef class _Tensor:
     cdef Tensor ptr
 
 
-cdef inline _Tensor wrapTensor(Tensor ptr):
+cdef inline _Tensor wrapTensor(Tensor ptr) except +:
     cdef _Tensor tensor = _Tensor.__new__(_Tensor)
     tensor.ptr = ptr
     return tensor

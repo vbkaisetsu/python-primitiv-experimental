@@ -275,27 +275,27 @@ inline Tensor Tensor_softmax_cross_entropy(const Tensor &x, const std::vector<un
     return operators::softmax_cross_entropy<Tensor>(x, ids, dim);
 }
 
-inline Node Node_sum(const Node &x) {
+inline Node Node_batch_sum(const Node &x) {
     return operators::batch::sum<Node>(x);
 }
 
-inline Tensor Tensor_sum(const Tensor &x) {
+inline Tensor Tensor_batch_sum(const Tensor &x) {
     return operators::batch::sum<Tensor>(x);
 }
 
-inline Node Node_mean(const Node &x) {
+inline Node Node_batch_mean(const Node &x) {
     return operators::batch::mean<Node>(x);
 }
 
-inline Tensor Tensor_mean(const Tensor &x) {
+inline Tensor Tensor_batch_mean(const Tensor &x) {
     return operators::batch::mean<Tensor>(x);
 }
 
-inline Node Node_normalize(const Node &x) {
+inline Node Node_batch_normalize(const Node &x) {
     return operators::batch::normalize<Node>(x);
 }
 
-inline Tensor Tensor_normalize(const Tensor &x) {
+inline Tensor Tensor_batch_normalize(const Tensor &x) {
     return operators::batch::normalize<Tensor>(x);
 }
 
@@ -347,63 +347,63 @@ inline Tensor Tensor_identity(unsigned size, Device &dev) {
     return operators::identity<Tensor>(size, dev);
 }
 
-inline Node Node_bernoulli(const Shape &shape, float p, Device &dev, Graph &g) {
+inline Node Node_random_bernoulli(const Shape &shape, float p, Device &dev, Graph &g) {
     return operators::random::bernoulli(shape, p, dev, g);
 }
 
-inline Node Node_bernoulli(const Shape &shape, float p, Device &dev) {
+inline Node Node_random_bernoulli(const Shape &shape, float p, Device &dev) {
     return operators::random::bernoulli<Node>(shape, p, dev);
 }
 
-inline Tensor Tensor_bernoulli(const Shape &shape, float p, Device &dev) {
+inline Tensor Tensor_random_bernoulli(const Shape &shape, float p, Device &dev) {
     return operators::random::bernoulli<Tensor>(shape, p, dev);
 }
 
-inline Node Node_uniform(const Shape &shape, float lower, float upper, Device &dev, Graph &g) {
+inline Node Node_random_uniform(const Shape &shape, float lower, float upper, Device &dev, Graph &g) {
     return operators::random::uniform(shape, lower, upper, dev, g);
 }
 
-inline Node Node_uniform(const Shape &shape, float lower, float upper, Device &dev) {
+inline Node Node_random_uniform(const Shape &shape, float lower, float upper, Device &dev) {
     return operators::random::uniform<Node>(shape, lower, upper, dev);
 }
 
-inline Tensor Tensor_uniform(const Shape &shape, float lower, float upper, Device &dev) {
+inline Tensor Tensor_random_uniform(const Shape &shape, float lower, float upper, Device &dev) {
     return operators::random::uniform<Tensor>(shape, lower, upper, dev);
 }
 
-inline Node Node_normal(const Shape &shape, float mean, float sd, Device &dev, Graph &g) {
+inline Node Node_random_normal(const Shape &shape, float mean, float sd, Device &dev, Graph &g) {
     return operators::random::normal(shape, mean, sd, dev, g);
 }
 
-inline Node Node_normal(const Shape &shape, float mean, float sd, Device &dev) {
+inline Node Node_random_normal(const Shape &shape, float mean, float sd, Device &dev) {
     return operators::random::normal<Node>(shape, mean, sd, dev);
 }
 
-inline Tensor Tensor_normal(const Shape &shape, float mean, float sd, Device &dev) {
+inline Tensor Tensor_random_normal(const Shape &shape, float mean, float sd, Device &dev) {
     return operators::random::normal<Tensor>(shape, mean, sd, dev);
 }
 
-inline Node Node_log_normal(const Shape &shape, float mean, float sd, Device &dev, Graph &g) {
+inline Node Node_random_log_normal(const Shape &shape, float mean, float sd, Device &dev, Graph &g) {
     return operators::random::log_normal(shape, mean, sd, dev, g);
 }
 
-inline Node Node_log_normal(const Shape &shape, float mean, float sd, Device &dev) {
+inline Node Node_random_log_normal(const Shape &shape, float mean, float sd, Device &dev) {
     return operators::random::log_normal<Node>(shape, mean, sd, dev);
 }
 
-inline Tensor Tensor_log_normal(const Shape &shape, float mean, float sd, Device &dev) {
+inline Tensor Tensor_random_log_normal(const Shape &shape, float mean, float sd, Device &dev) {
     return operators::random::log_normal<Tensor>(shape, mean, sd, dev);
 }
 
-inline Node Node_gumbel(const Shape &shape, float mu, float beta, Device &dev, Graph &g) {
+inline Node Node_random_gumbel(const Shape &shape, float mu, float beta, Device &dev, Graph &g) {
     return operators::random::gumbel(shape, mu, beta, dev, g);
 }
 
-inline Node Node_gumbel(const Shape &shape, float mu, float beta, Device &dev) {
+inline Node Node_random_gumbel(const Shape &shape, float mu, float beta, Device &dev) {
     return operators::random::gumbel<Node>(shape, mu, beta, dev);
 }
 
-inline Tensor Tensor_gumbel(const Shape &shape, float mu, float beta, Device &dev) {
+inline Tensor Tensor_random_gumbel(const Shape &shape, float mu, float beta, Device &dev) {
     return operators::random::gumbel<Tensor>(shape, mu, beta, dev);
 }
 

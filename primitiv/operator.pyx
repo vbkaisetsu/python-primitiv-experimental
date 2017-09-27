@@ -10,10 +10,12 @@ from primitiv.parameter cimport _Parameter
 from primitiv.trainer cimport wrapTrainer
 
 
-cdef class _operators:
+class _operators:
 
     @staticmethod
-    def input_vector(_Shape shape, vector[float] data, _Device dev = _Device.get_default_device(), _Graph g = None):
+    def input_vector(_Shape shape, vector[float] data, _Device dev = None, _Graph g = None):
+        if dev == None:
+            dev = _Device.get_default_device()
         if g != None:
             return wrapNode(Node_input_vector(shape.ptr, data, dev.ptr[0], g.ptr[0]))
         else:
@@ -147,18 +149,6 @@ cdef class _operators:
         return wrapNode(Node_softmax_cross_entropy(x.ptr, ids, dim))
 
     @staticmethod
-    def sum(_Node x):
-        return wrapNode(Node_sum(x.ptr))
-
-    @staticmethod
-    def mean(_Node x):
-        return wrapNode(Node_mean(x.ptr))
-
-    @staticmethod
-    def normalize(_Node x):
-        return wrapNode(Node_normalize(x.ptr))
-
-    @staticmethod
     def constant(_Shape shape, float k, _Device dev, _Graph g):
         return wrapNode(Node_constant(shape.ptr, k, dev.ptr[0], g.ptr[0]))
 
@@ -190,45 +180,60 @@ cdef class _operators:
     def identity(unsigned size, _Device dev):
         return wrapNode(Node_identity(size, dev.ptr[0]))
 
-    @staticmethod
-    def bernoulli(_Shape shape, float p, _Device dev, _Graph g):
-        return wrapNode(Node_bernoulli(shape.ptr, p, dev.ptr[0], g.ptr[0]))
 
-    @staticmethod
-    def bernoulli(_Shape shape, float p, _Device dev):
-        return wrapNode(Node_bernoulli(shape.ptr, p, dev.ptr[0]))
+    class batch:
+        @staticmethod
+        def sum(_Node x):
+            return wrapNode(Node_batch_sum(x.ptr))
 
-    @staticmethod
-    def uniform(_Shape shape, float lower, float upper, _Device dev, _Graph g):
-        return wrapNode(Node_uniform(shape.ptr, lower, upper, dev.ptr[0], g.ptr[0]))
+        @staticmethod
+        def mean(_Node x):
+            return wrapNode(Node_batch_mean(x.ptr))
 
-    @staticmethod
-    def uniform(_Shape shape, float lower, float upper, _Device dev):
-        return wrapNode(Node_uniform(shape.ptr, lower, upper, dev.ptr[0]))
+        @staticmethod
+        def normalize(_Node x):
+            return wrapNode(Node_batch_normalize(x.ptr))
 
-    @staticmethod
-    def normal(_Shape shape, float mean, float sd, _Device dev, _Graph g):
-        return wrapNode(Node_normal(shape.ptr, mean, sd, dev.ptr[0], g.ptr[0]))
+    class random:
+        @staticmethod
+        def bernoulli(_Shape shape, float p, _Device dev, _Graph g):
+            return wrapNode(Node_random_bernoulli(shape.ptr, p, dev.ptr[0], g.ptr[0]))
 
-    @staticmethod
-    def normal(_Shape shape, float mean, float sd, _Device dev):
-        return wrapNode(Node_normal(shape.ptr, mean, sd, dev.ptr[0]))
+        @staticmethod
+        def bernoulli(_Shape shape, float p, _Device dev):
+            return wrapNode(Node_random_bernoulli(shape.ptr, p, dev.ptr[0]))
 
-    @staticmethod
-    def log_normal(_Shape shape, float mean, float sd, _Device dev, _Graph g):
-        return wrapNode(Node_log_normal(shape.ptr, mean, sd, dev.ptr[0], g.ptr[0]))
+        @staticmethod
+        def uniform(_Shape shape, float lower, float upper, _Device dev, _Graph g):
+            return wrapNode(Node_random_uniform(shape.ptr, lower, upper, dev.ptr[0], g.ptr[0]))
 
-    @staticmethod
-    def log_normal(_Shape shape, float mean, float sd, _Device dev):
-        return wrapNode(Node_log_normal(shape.ptr, mean, sd, dev.ptr[0]))
+        @staticmethod
+        def uniform(_Shape shape, float lower, float upper, _Device dev):
+            return wrapNode(Node_random_uniform(shape.ptr, lower, upper, dev.ptr[0]))
 
-    @staticmethod
-    def gumbel(_Shape shape, float mu, float beta, _Device dev, _Graph g):
-        return wrapNode(Node_gumbel(shape.ptr, mu, beta, dev.ptr[0], g.ptr[0]))
+        @staticmethod
+        def normal(_Shape shape, float mean, float sd, _Device dev, _Graph g):
+            return wrapNode(Node_random_normal(shape.ptr, mean, sd, dev.ptr[0], g.ptr[0]))
 
-    @staticmethod
-    def gumbel(_Shape shape, float mu, float beta, _Device dev):
-        return wrapNode(Node_gumbel(shape.ptr, mu, beta, dev.ptr[0]))
+        @staticmethod
+        def normal(_Shape shape, float mean, float sd, _Device dev):
+            return wrapNode(Node_random_normal(shape.ptr, mean, sd, dev.ptr[0]))
+
+        @staticmethod
+        def log_normal(_Shape shape, float mean, float sd, _Device dev, _Graph g):
+            return wrapNode(Node_random_log_normal(shape.ptr, mean, sd, dev.ptr[0], g.ptr[0]))
+
+        @staticmethod
+        def log_normal(_Shape shape, float mean, float sd, _Device dev):
+            return wrapNode(Node_random_log_normal(shape.ptr, mean, sd, dev.ptr[0]))
+
+        @staticmethod
+        def gumbel(_Shape shape, float mu, float beta, _Device dev, _Graph g):
+            return wrapNode(Node_random_gumbel(shape.ptr, mu, beta, dev.ptr[0], g.ptr[0]))
+
+        @staticmethod
+        def gumbel(_Shape shape, float mu, float beta, _Device dev):
+            return wrapNode(Node_random_gumbel(shape.ptr, mu, beta, dev.ptr[0]))
 
     @staticmethod
     def dropout(_Node x, float rate, bool enabled):

@@ -33,7 +33,7 @@ cdef class _Shape:
     cdef Shape ptr
 
 
-cdef inline _Shape wrapShape(Shape ptr):
+cdef inline _Shape wrapShape(Shape ptr) except +:
     cdef _Shape shape = _Shape.__new__(_Shape)
     shape.ptr = ptr
     return shape

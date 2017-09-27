@@ -7,9 +7,11 @@ from primitiv.parameter import _Parameter as Parameter
 from primitiv.graph import _Node as Node
 from primitiv.graph import _Graph as Graph
 from primitiv.trainer import _Trainer as Trainer
-from primitiv.operators import _operators as operators
+from primitiv.operator import _operators as operators
 from primitiv import functions
 from primitiv import initializers
+from primitiv import trainers
+
 
 __all__ = [
     "CPUDevice",
@@ -27,4 +29,5 @@ __all__ = [
     "Shape",
     "Tensor",
     "Trainer",
+    "trainers",
 ]

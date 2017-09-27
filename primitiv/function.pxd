@@ -10,23 +10,23 @@ import cython.template
 
 cdef extern from "primitiv/function.h" namespace "primitiv":
     cdef cppclass Function:
-        Shape forward_shape(vector[const Shape *] &args)
-        Device *get_device()
-        const Tensor *get_inner_value()
-        Tensor forward(const vector[const Tensor *] &args)
+        Shape forward_shape(vector[const Shape *] &args) except +
+        Device *get_device() except +
+        const Tensor *get_inner_value() except +
+        Tensor forward(const vector[const Tensor *] &args) except +
         void backward(
             const Tensor &cur_value,
             const Tensor &cur_grad,
             const vector[const Tensor *] &arg_values,
-            const vector[Tensor *] &arg_grads)
-        string name()
+            const vector[Tensor *] &arg_grads) except +
+        string name() except +
 
 
 cdef class _Function:
     cdef Function *ptr
 
 
-cdef inline _Function wrapFunction(Function *ptr):
+cdef inline _Function wrapFunction(Function *ptr) except +:
     cdef _Function function = _Function.__new__(_Function)
     function.ptr = ptr
     return function
