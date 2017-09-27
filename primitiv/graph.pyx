@@ -41,6 +41,68 @@ cdef class _Node:
     def __iter__(self):
         return iter(self.ptr.to_vector())
 
+    def __pos__(self):
+        return wrapNode(op_node_pos(self.ptr))
+
+    def __neg__(self):
+        return wrapNode(op_node_neg(self.ptr))
+
+    def __add__(_Node self, v):
+        if isinstance(v, (int, float)):
+            return wrapNode(op_node_add(self.ptr, <float> v))
+        elif isinstance(v, _Node):
+            return wrapNode(op_node_add(self.ptr, (<_Node> v).ptr))
+        else:
+            return NotImplemented
+
+    def __radd__(self, v):
+        if isinstance(v, _Node):
+            return wrapNode(op_node_add(<float> v, self.ptr))
+        else:
+            return NotImplemented
+
+    def __sub__(_Node self, v):
+        if isinstance(v, (int, float)):
+            return wrapNode(op_node_sub(self.ptr, <float> v))
+        elif isinstance(v, _Node):
+            return wrapNode(op_node_sub(self.ptr, (<_Node> v).ptr))
+        else:
+            return NotImplemented
+
+    def __rsub__(self, v):
+        if isinstance(v, _Node):
+            return wrapNode(op_node_sub(<float> v, self.ptr))
+        else:
+            return NotImplemented
+
+    def __mul__(_Node self, v):
+        if isinstance(v, (int, float)):
+            return wrapNode(op_node_mul(self.ptr, <float> v))
+        elif isinstance(v, _Node):
+            return wrapNode(op_node_mul(self.ptr, (<_Node> v).ptr))
+        else:
+            return NotImplemented
+
+    def __rmul__(self, v):
+        if isinstance(v, _Node):
+            return wrapNode(op_node_mul(<float> v, self.ptr))
+        else:
+            return NotImplemented
+
+    def __div__(_Node self, v):
+        if isinstance(v, (int, float)):
+            return wrapNode(op_node_div(self.ptr, <float> v))
+        elif isinstance(v, _Node):
+            return wrapNode(op_node_div(self.ptr, (<_Node> v).ptr))
+        else:
+            return NotImplemented
+
+    def __rdiv__(self, v):
+        if isinstance(v, _Node):
+            return wrapNode(op_node_div(<float> v, self.ptr))
+        else:
+            return NotImplemented
+
 
 cdef class _Graph:
 

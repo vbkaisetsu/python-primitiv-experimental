@@ -1,3 +1,6 @@
+#ifndef PYTHON_PRIMITIV_OP_TEMPLATE_WRAPPER_H_
+#define PYTHON_PRIMITIV_OP_TEMPLATE_WRAPPER_H_
+
 #include <primitiv/operators.h>
 
 #include <primitiv/device.h>

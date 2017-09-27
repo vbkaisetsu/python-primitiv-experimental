@@ -11,7 +11,7 @@ ext_modules=[
               libraries=["primitiv"]
     ),
     Extension("primitiv.tensor",
-              sources=["primitiv/tensor.pyx", "primitiv/tensor_op.cpp"],
+              sources=["primitiv/tensor.pyx"],
               language="c++",
               libraries=["primitiv"]
     ),

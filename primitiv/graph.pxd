@@ -20,6 +20,23 @@ cdef extern from "primitiv/graph.h" namespace "primitiv":
         vector[float] to_vector()
 
 
+cdef extern from "node_op.h" namespace "python_primitiv_node":
+    cdef Node op_node_pos(const Node &x)
+    cdef Node op_node_neg(const Node &x)
+    cdef Node op_node_add(const Node &x, float k)
+    cdef Node op_node_add(float k, const Node &x)
+    cdef Node op_node_add(const Node &a, const Node &b)
+    cdef Node op_node_sub(const Node &x, float k)
+    cdef Node op_node_sub(float k, const Node &x)
+    cdef Node op_node_sub(const Node &a, const Node &b)
+    cdef Node op_node_mul(const Node &x, float k)
+    cdef Node op_node_mul(float k, const Node &x)
+    cdef Node op_node_mul(const Node &a, const Node &b)
+    cdef Node op_node_div(const Node &x, float k)
+    cdef Node op_node_div(float k, const Node &x)
+    cdef Node op_node_div(const Node &a, const Node &b)
+
+
 cdef extern from "primitiv/graph.h" namespace "primitiv":
     cdef cppclass Graph:
         Graph()

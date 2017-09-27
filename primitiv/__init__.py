@@ -6,6 +6,8 @@ from primitiv.function import _Function as Function
 from primitiv.parameter import _Parameter as Parameter
 from primitiv.graph import _Node as Node
 from primitiv.graph import _Graph as Graph
+from primitiv.trainer import _Trainer as Trainer
+from primitiv.operators import _operators as operators
 from primitiv import functions
 from primitiv import initializers
 
@@ -20,11 +22,9 @@ __all__ = [
     "Graph",
     "Initializer",
     "initializers",
-    #"operators",
+    "operators",
     "Parameter",
     "Shape",
     "Tensor",
-    #"Trainer",
-
-    #"Error",
+    "Trainer",
 ]
