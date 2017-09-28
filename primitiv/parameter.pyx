@@ -2,42 +2,44 @@ from libcpp.vector cimport vector
 from libcpp cimport bool
 
 from primitiv.cpu_device cimport CPUDevice
-from primitiv.device cimport _Device, wrapDevice
+from primitiv.device cimport _Device, wrapDevice, get_default_device
 from primitiv.tensor cimport wrapTensor
 from primitiv.shape cimport wrapShape
-from primitiv.parameter cimport load as Parameter_load
+from primitiv.parameter cimport Parameter_load, Parameter
 
 
 cdef class _Parameter:
-    def __cinit__(self):
-        self.ptr = new Parameter()
+    def __init__(self, str name, shape, init = None, _Device device = None):
+        cdef _Shape _shape
+        if isinstance(shape, list):
+            _shape = _Shape(shape)
+        elif isinstance(shape, _Shape):
+            _shape = shape
+        else:
+            raise TypeError("Argument 'shape' has incorrect type (_Shape or list)")
+        if init == None:
+            if device == None:
+                self.ptr = new Parameter(<string> name.encode("utf-8"), _shape.ptr, get_default_device())
+            else:
+                self.ptr = new Parameter(<string> name.encode("utf-8"), _shape.ptr, device.ptr[0])
+        elif isinstance(init, list):
+            if device == None:
+                self.ptr = new Parameter(<string> name.encode("utf-8"), _shape.ptr, <vector[float]> init, get_default_device())
+            else:
+                self.ptr = new Parameter(<string> name.encode("utf-8"), _shape.ptr, <vector[float]> init, device.ptr[0])
+        elif isinstance(init, _Initializer):
+            if device == None:
+                self.ptr = new Parameter(<string> name.encode("utf-8"), _shape.ptr, (<_Initializer> init).ptr[0], get_default_device())
+            else:
+                self.ptr = new Parameter(<string> name.encode("utf-8"), _shape.ptr, (<_Initializer> init).ptr[0], device.ptr[0])
+        else:
+            raise TypeError("Argument 'init' has incorrect type (list or Initializer)")
 
     def __dealloc__(self):
         del self.ptr
 
     #def copy(self):
         #return wrapParameter(new Parameter(self.ptr[0]))
-
-    @staticmethod
-    def new(str name, _Shape shape, _Device device = None):
-        if device == None:
-            return wrapParameter(new Parameter(<string> name.encode("utf-8"), shape.ptr, (<_Device> _Device.get_default_device()).ptr[0]))
-        else:
-            return wrapParameter(new Parameter(<string> name.encode("utf-8"), shape.ptr, device.ptr[0]))
-
-    @staticmethod
-    def new_from_vector(str name, _Shape shape,  vector[float] value, _Device device = None):
-        if device == None:
-            return wrapParameter(new Parameter(<string> name.encode("utf-8"), shape.ptr, value, (<_Device> _Device.get_default_device()).ptr[0]))
-        else:
-            return wrapParameter(new Parameter(<string> name.encode("utf-8"), shape.ptr, value, device.ptr[0]))
-
-    @staticmethod
-    def new_from_initializer(str name, _Shape shape, _Initializer init, _Device device = None):
-        if device == None:
-            return wrapParameter(new Parameter(<string> name.encode("utf-8"), shape.ptr, init.ptr[0], (<_Device> _Device.get_default_device()).ptr[0]))
-        else:
-            return wrapParameter(new Parameter(<string> name.encode("utf-8"), shape.ptr, init.ptr[0], device.ptr[0]))
 
     def valid(self):
         return self.ptr.valid()
@@ -83,9 +85,9 @@ cdef class _Parameter:
         self.ptr.save(<string> path.encode("utf-8"), with_stats)
         return
 
-    #@staticmethod
-    #def load(string path, bool with_stats = True, _Device device = None):
-        #if device == None:
-            #return wrapParameter(Parameter_load(path, with_stats, (<_Device> _Device.get_default_device()).ptr[0])))
-        #else:
-            #return wrapParameter(Parameter_load(path, with_stats, device.ptr[0])))
+    @staticmethod
+    def load(str path, bool with_stats = True, _Device device = None):
+        if device == None:
+            return wrapParameter(Parameter_load(<string> path.encode("utf-8"), with_stats, get_default_device()))
+        else:
+            return wrapParameter(Parameter_load(<string> path.encode("utf-8"), with_stats, device.ptr[0]))

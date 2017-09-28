@@ -29,8 +29,9 @@ cdef extern from "primitiv/parameter.h" namespace "primitiv":
         Tensor &stats(const string &name) except +
         void save(const string &path, bool with_stats) except +
 
-cdef extern from "primitiv/parameter.h" namespace "primitiv::Parameter":
-    Parameter load(const string &path, bool with_stats, Device &device) except +
+
+cdef extern from "parameter_load_wrapper.h" namespace "python_primitiv":
+    Parameter* Parameter_load(const string &path, bool with_stats, Device &device) except +
 
 
 cdef class _Parameter:
