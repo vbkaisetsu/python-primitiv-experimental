@@ -130,7 +130,7 @@ cdef class _Graph:
         cdef _Node x
         for x in args:
             vec.push_back(x.wrapped)
-            return wrapNode(self.wrapped.add_function(unique_ptr[Function](func.wrapped), vec))
+        return wrapNode(self.wrapped.add_function(unique_ptr[Function](func.wrapped), vec))
 
     def forward(self, _Node node):
         return wrapTensor(self.wrapped.forward(node.wrapped))
