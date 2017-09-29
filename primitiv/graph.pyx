@@ -13,101 +13,108 @@ cdef class _Node:
 
     def __init__(self, _Node node = None):
         if node == None:
-            self.ptr = Node(node.ptr)
+            self.wrapped = Node(node.wrapped)
         else:
-            self.ptr = Node()
+            self.wrapped = Node()
 
     def valid(self):
-        return self.ptr.valid()
+        return self.wrapped.valid()
 
     def graph(self):
-        return wrapGraph(&self.ptr.graph())
+        return wrapGraph(&self.wrapped.graph())
 
     def function_id(self):
-        return self.ptr.function_id()
+        return self.wrapped.function_id()
 
     def value_id(self):
-        return self.ptr.value_id()
+        return self.wrapped.value_id()
 
     def shape(self):
-        return wrapShape(self.ptr.shape())
+        return wrapShape(self.wrapped.shape())
 
     def device(self):
-        return wrapDevice(&self.ptr.device())
+        return wrapDevice(&self.wrapped.device())
 
     def to_vector(self):
-        return self.ptr.to_vector()
+        return self.wrapped.to_vector()
 
     def __iter__(self):
-        return iter(self.ptr.to_vector())
+        return iter(self.wrapped.to_vector())
 
     def __pos__(self):
-        return wrapNode(op_node_pos(self.ptr))
+        return wrapNode(op_node_pos(self.wrapped))
 
     def __neg__(self):
-        return wrapNode(op_node_neg(self.ptr))
+        return wrapNode(op_node_neg(self.wrapped))
 
     def __add__(_Node self, v):
         if isinstance(v, (int, float)):
-            return wrapNode(op_node_add(self.ptr, <float> v))
+            return wrapNode(op_node_add(self.wrapped, <float> v))
         elif isinstance(v, _Node):
-            return wrapNode(op_node_add(self.ptr, (<_Node> v).ptr))
+            return wrapNode(op_node_add(self.wrapped, (<_Node> v).wrapped))
         else:
             return NotImplemented
 
     def __radd__(self, v):
         if isinstance(v, _Node):
-            return wrapNode(op_node_add(<float> v, self.ptr))
+            return wrapNode(op_node_add(<float> v, self.wrapped))
         else:
             return NotImplemented
 
     def __sub__(_Node self, v):
         if isinstance(v, (int, float)):
-            return wrapNode(op_node_sub(self.ptr, <float> v))
+            return wrapNode(op_node_sub(self.wrapped, <float> v))
         elif isinstance(v, _Node):
-            return wrapNode(op_node_sub(self.ptr, (<_Node> v).ptr))
+            return wrapNode(op_node_sub(self.wrapped, (<_Node> v).wrapped))
         else:
             return NotImplemented
 
     def __rsub__(self, v):
         if isinstance(v, _Node):
-            return wrapNode(op_node_sub(<float> v, self.ptr))
+            return wrapNode(op_node_sub(<float> v, self.wrapped))
         else:
             return NotImplemented
 
     def __mul__(_Node self, v):
         if isinstance(v, (int, float)):
-            return wrapNode(op_node_mul(self.ptr, <float> v))
+            return wrapNode(op_node_mul(self.wrapped, <float> v))
         elif isinstance(v, _Node):
-            return wrapNode(op_node_mul(self.ptr, (<_Node> v).ptr))
+            return wrapNode(op_node_mul(self.wrapped, (<_Node> v).wrapped))
         else:
             return NotImplemented
 
     def __rmul__(self, v):
         if isinstance(v, _Node):
-            return wrapNode(op_node_mul(<float> v, self.ptr))
+            return wrapNode(op_node_mul(<float> v, self.wrapped))
         else:
             return NotImplemented
 
     def __div__(_Node self, v):
         if isinstance(v, (int, float)):
-            return wrapNode(op_node_div(self.ptr, <float> v))
+            return wrapNode(op_node_div(self.wrapped, <float> v))
         elif isinstance(v, _Node):
-            return wrapNode(op_node_div(self.ptr, (<_Node> v).ptr))
+            return wrapNode(op_node_div(self.wrapped, (<_Node> v).wrapped))
         else:
             return NotImplemented
 
     def __rdiv__(self, v):
         if isinstance(v, _Node):
-            return wrapNode(op_node_div(<float> v, self.ptr))
+            return wrapNode(op_node_div(<float> v, self.wrapped))
         else:
             return NotImplemented
 
 
 cdef class _Graph:
 
-    def __init__(self):
-        self.ptr = new Graph()
+    def __cinit__(self):
+        self.wrapped = new Graph()
+        if self.wrapped is NULL:
+            raise MemoryError()
+
+    def __dealloc__(self):
+        if self.wrapped is not NULL:
+            del self.wrapped
+            self.wrapped = NULL
 
     @staticmethod
     def get_default_graph():
@@ -115,32 +122,32 @@ cdef class _Graph:
 
     @staticmethod
     def set_default_graph(_Graph g):
-        set_default_graph(g.ptr[0])
+        set_default_graph(g.wrapped[0])
         return
 
     def add_function(self, _Function func, args):
         cdef vector[Node] vec
         cdef _Node x
         for x in args:
-            vec.push_back(x.ptr)
-            return wrapNode(self.ptr.add_function(unique_ptr[Function](func.ptr), vec))
+            vec.push_back(x.wrapped)
+            return wrapNode(self.wrapped.add_function(unique_ptr[Function](func.wrapped), vec))
 
     def forward(self, _Node node):
-        return wrapTensor(self.ptr.forward(node.ptr))
+        return wrapTensor(self.wrapped.forward(node.wrapped))
 
     def backward(self, _Node node):
-        self.ptr.backward(node.ptr)
+        self.wrapped.backward(node.wrapped)
         return
 
     def get_shape(self, _Node node):
-        return wrapShape(self.ptr.get_shape(node.ptr))
+        return wrapShape(self.wrapped.get_shape(node.wrapped))
 
     def get_device(self, _Node node):
-        return wrapDevice(&self.ptr.get_device(node.ptr))
+        return wrapDevice(&self.wrapped.get_device(node.wrapped))
 
     def dump(self):
-        self.ptr.dump()
+        self.wrapped.dump()
         return
 
     def num_functions(self):
-        return self.ptr.num_functions()
+        return self.wrapped.num_functions()

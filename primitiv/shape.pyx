@@ -9,68 +9,68 @@ cdef class _Shape:
 
     def __init__(self, dims = None, unsigned batch = 1):
         if dims == None:
-            self.ptr = Shape()
+            self.wrapped = Shape()
         else:
-            self.ptr = Shape(<vector[unsigned]> dims, <unsigned> batch)
+            self.wrapped = Shape(<vector[unsigned]> dims, <unsigned> batch)
 
     def depth(self):
-        return self.ptr.depth()
+        return self.wrapped.depth()
 
     def batch(self):
-        return self.ptr.batch()
+        return self.wrapped.batch()
 
     def volume(self):
-        return self.ptr.volume()
+        return self.wrapped.volume()
 
     def lower_volume(self, unsigned dim):
-        return self.ptr.lower_volume(dim)
+        return self.wrapped.lower_volume(dim)
 
     def size(self):
-        return self.ptr.size()
+        return self.wrapped.size()
 
     def __str__(self):
-        return self.ptr.to_string().decode("utf-8")
+        return self.wrapped.to_string().decode("utf-8")
 
     def __getitem__(self, unsigned i):
-        return self.ptr[i]
+        return self.wrapped[i]
 
     def __eq__(_Shape self, _Shape rhs):
-        return self.ptr == rhs.ptr
+        return self.wrapped == rhs.wrapped
 
     def __ne__(_Shape self, _Shape rhs):
-        return self.ptr != rhs.ptr
+        return self.wrapped != rhs.wrapped
 
     def has_batch(self):
-        return self.ptr.has_batch()
+        return self.wrapped.has_batch()
 
     def has_compatible_batch(self, _Shape rhs):
-        return self.ptr.has_compatible_batch(rhs.ptr)
+        return self.wrapped.has_compatible_batch(rhs.wrapped)
 
     def is_scalar(self):
-        return self.ptr.is_scalar()
+        return self.wrapped.is_scalar()
 
     def is_row_vector(self):
-        return self.ptr.is_row_vector()
+        return self.wrapped.is_row_vector()
 
     def is_matrix(self):
-        return self.ptr.is_matrix()
+        return self.wrapped.is_matrix()
 
     def has_same_dims(self, _Shape rhs):
-        return self.ptr.has_same_dims(rhs.ptr)
+        return self.wrapped.has_same_dims(rhs.wrapped)
 
     def has_same_loo_dims(self, _Shape rhs, unsigned dim):
-        return self.ptr.has_same_loo_dims(rhs.ptr, dim)
+        return self.wrapped.has_same_loo_dims(rhs.wrapped, dim)
 
     def resize_dim(self, unsigned dim, unsigned m):
-        self.ptr.resize_dim(dim, m)
+        self.wrapped.resize_dim(dim, m)
         return self
 
     def resize_batch(self, unsigned batch):
-        self.ptr.resize_batch(batch)
+        self.wrapped.resize_batch(batch)
         return self
 
     def update_dim(self, unsigned dim, unsigned m):
-        self.ptr.update_dim(dim, m)
+        self.wrapped.update_dim(dim, m)
 
     def update_batch(self, unsigned batch):
-        self.ptr.update_batch(batch)
+        self.wrapped.update_batch(batch)

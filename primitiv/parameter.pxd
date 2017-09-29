@@ -35,10 +35,10 @@ cdef extern from "parameter_load_wrapper.h" namespace "python_primitiv":
 
 
 cdef class _Parameter:
-    cdef Parameter *ptr
+    cdef Parameter *wrapped
 
 
-cdef inline _Parameter wrapParameter(Parameter *ptr) except +:
+cdef inline _Parameter wrapParameter(Parameter *wrapped) except +:
     cdef _Parameter parameter = _Parameter.__new__(_Parameter)
-    parameter.ptr = ptr
+    parameter.wrapped = wrapped
     return parameter

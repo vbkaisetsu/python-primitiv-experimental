@@ -22,19 +22,19 @@ cdef extern from "primitiv/initializer_impl.h" namespace "primitiv::initializers
 
 
 cdef class _Constant(_Initializer):
-    cdef Constant *ptr_constant
+    pass
 
 cdef class _Uniform(_Initializer):
-    cdef Uniform *ptr_uniform
+    pass
 
 cdef class _Normal(_Initializer):
-    cdef Normal *ptr_normal
+    pass
 
 cdef class _Identity(_Initializer):
-    cdef Identity *ptr_identity
+    pass
 
 cdef class _XavierUniform(_Initializer):
-    cdef XavierUniform *ptr_xavieruniform
+    pass
 
 cdef class _XavierNormal(_Initializer):
-    cdef XavierNormal *ptr_xaviernormal
+    pass

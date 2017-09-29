@@ -55,20 +55,20 @@ cdef extern from "primitiv/graph.h" namespace "primitiv::Graph":
 
 
 cdef class _Node:
-    cdef Node ptr
+    cdef Node wrapped
 
 
 cdef class _Graph:
-    cdef Graph *ptr
+    cdef Graph *wrapped
 
 
-cdef inline _Node wrapNode(Node ptr) except +:
+cdef inline _Node wrapNode(Node wrapped) except +:
     cdef _Node node = _Node.__new__(_Node)
-    node.ptr = ptr
+    node.wrapped = wrapped
     return node
 
 
-cdef inline _Graph wrapGraph(Graph *ptr) except +:
+cdef inline _Graph wrapGraph(Graph *wrapped) except +:
     cdef _Graph graph = _Graph.__new__(_Graph)
-    graph.ptr = ptr
+    graph.wrapped = wrapped
     return graph

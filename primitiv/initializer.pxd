@@ -8,10 +8,10 @@ cdef extern from "primitiv/initializer.h" namespace "primitiv":
 
 
 cdef class _Initializer:
-    cdef Initializer *ptr
+    cdef Initializer *wrapped
 
 
-cdef inline _Initializer wrapInitializer(Initializer *ptr) except +:
+cdef inline _Initializer wrapInitializer(Initializer *wrapped) except +:
     cdef _Initializer initializer = _Initializer.__new__(_Initializer)
-    initializer.ptr = ptr
+    initializer.wrapped = wrapped
     return initializer

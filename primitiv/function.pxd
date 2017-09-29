@@ -23,10 +23,10 @@ cdef extern from "primitiv/function.h" namespace "primitiv":
 
 
 cdef class _Function:
-    cdef Function *ptr
+    cdef Function *wrapped
 
 
-cdef inline _Function wrapFunction(Function *ptr) except +:
+cdef inline _Function wrapFunction(Function *wrapped) except +:
     cdef _Function function = _Function.__new__(_Function)
-    function.ptr = ptr
+    function.wrapped = wrapped
     return function

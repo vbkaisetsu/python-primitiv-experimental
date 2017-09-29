@@ -11,14 +11,14 @@ cdef class _Function:
         cdef vector[const Shape *] vec
         cdef _Shape x
         for x in args:
-            vec.push_back(&x.ptr)
-        return wrapShape(self.ptr.forward_shape(vec))
+            vec.push_back(&x.wrapped)
+        return wrapShape(self.wrapped.forward_shape(vec))
 
     def get_device(self):
-        return wrapDevice(self.ptr.get_device())
+        return wrapDevice(self.wrapped.get_device())
 
     def get_inner_value(self):
-        cdef const Tensor *tensor = self.ptr.get_inner_value()
+        cdef const Tensor *tensor = self.wrapped.get_inner_value()
         if tensor == NULL:
             return None
         return wrapTensor(tensor[0])
@@ -27,19 +27,19 @@ cdef class _Function:
         cdef vector[const Tensor *] vec
         cdef _Tensor x
         for x in args:
-            vec.push_back(&x.ptr)
-        return wrapTensor(self.ptr.forward(vec))
+            vec.push_back(&x.wrapped)
+        return wrapTensor(self.wrapped.forward(vec))
 
     def backward(self, _Tensor cur_value, _Tensor cur_grad, arg_values, arg_grads):
         cdef vector[const Tensor *] vec_arg_values
         cdef vector[Tensor *] vec_arg_grads
         cdef _Tensor x
         for x in arg_values:
-            vec_arg_values.push_back(&x.ptr)
+            vec_arg_values.push_back(&x.wrapped)
         for x in arg_grads:
-            vec_arg_grads.push_back(&x.ptr)
-        self.ptr.backward(cur_value.ptr, cur_grad.ptr, vec_arg_values, vec_arg_grads)
+            vec_arg_grads.push_back(&x.wrapped)
+        self.wrapped.backward(cur_value.wrapped, cur_grad.wrapped, vec_arg_values, vec_arg_grads)
         return
 
     def name(self):
-        return self.ptr.name().decode("utf-8")
+        return self.wrapped.name().decode("utf-8")

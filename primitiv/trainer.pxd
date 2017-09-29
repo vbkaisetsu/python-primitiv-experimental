@@ -32,10 +32,10 @@ cdef extern from "primitiv/trainer.h" namespace "primitiv::Trainer":
 
 
 cdef class _Trainer:
-    cdef Trainer *ptr
+    cdef Trainer *wrapped
 
 
-cdef inline _Trainer wrapTrainer(Trainer *ptr) except +:
+cdef inline _Trainer wrapTrainer(Trainer *wrapped) except +:
     cdef _Trainer trainer = _Trainer.__new__(_Trainer)
-    trainer.ptr = ptr
+    trainer.wrapped = wrapped
     return trainer

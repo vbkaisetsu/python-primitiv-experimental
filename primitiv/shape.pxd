@@ -30,10 +30,10 @@ cdef extern from "primitiv/shape.h" namespace "primitiv":
 
 
 cdef class _Shape:
-    cdef Shape ptr
+    cdef Shape wrapped
 
 
-cdef inline _Shape wrapShape(Shape ptr) except +:
+cdef inline _Shape wrapShape(Shape wrapped) except +:
     cdef _Shape shape = _Shape.__new__(_Shape)
-    shape.ptr = ptr
+    shape.wrapped = wrapped
     return shape

@@ -28,10 +28,10 @@ cdef extern from "tensor_op.h":
 
 
 cdef class _Tensor:
-    cdef Tensor ptr
+    cdef Tensor wrapped
 
 
-cdef inline _Tensor wrapTensor(Tensor ptr) except +:
+cdef inline _Tensor wrapTensor(Tensor wrapped) except +:
     cdef _Tensor tensor = _Tensor.__new__(_Tensor)
-    tensor.ptr = ptr
+    tensor.wrapped = wrapped
     return tensor

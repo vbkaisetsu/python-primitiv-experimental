@@ -15,48 +15,48 @@ cdef class _Trainer:
         return wrapTrainer(Trainer_load(path).get())
 
     def save(self, string &path):
-        self.ptr.save(path)
+        self.wrapped.save(path)
         return
 
     def name(self):
-        return self.ptr.name()
+        return self.wrapped.name()
 
     def get_epoch(self):
-        return self.ptr.get_epoch()
+        return self.wrapped.get_epoch()
 
     def set_epoch(self, unsigned epoch):
-        self.ptr.set_epoch(epoch)
+        self.wrapped.set_epoch(epoch)
         return
 
     def get_learning_rate_scaling(self):
-        return self.ptr.get_learning_rate_scaling()
+        return self.wrapped.get_learning_rate_scaling()
 
     def set_learning_rate_scaling(self, float scale):
-        self.ptr.set_learning_rate_scaling(scale)
+        self.wrapped.set_learning_rate_scaling(scale)
         return
 
     def get_weight_decay(self):
-        return self.ptr.get_weight_decay()
+        return self.wrapped.get_weight_decay()
 
     def set_weight_decay(self, float strength):
-        self.ptr.set_weight_decay(strength)
+        self.wrapped.set_weight_decay(strength)
         return
 
     def get_gradient_clipping(self):
-        return self.ptr.get_gradient_clipping()
+        return self.wrapped.get_gradient_clipping()
 
     def set_gradient_clipping(self, float threshold):
-        self.ptr.set_gradient_clipping(threshold)
+        self.wrapped.set_gradient_clipping(threshold)
         return
 
     def add_parameter(self, _Parameter param):
-        self.ptr.add_parameter(param.ptr[0])
+        self.wrapped.add_parameter(param.wrapped[0])
         return
 
     def reset_gradients(self):
-        self.ptr.reset_gradients()
+        self.wrapped.reset_gradients()
         return
 
     def update(self):
-        self.ptr.update()
+        self.wrapped.update()
         return

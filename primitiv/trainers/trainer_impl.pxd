@@ -18,8 +18,8 @@ cdef extern from "primitiv/trainer_impl.h" namespace "primitiv::trainers":
 
 
 cdef class _SGD(_Trainer):
-    cdef SGD *ptr_sgd
+    pass
 
 
 cdef class _Adam(_Trainer):
-    cdef Adam *ptr_adam
+    pass

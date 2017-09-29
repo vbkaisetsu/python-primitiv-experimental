@@ -10,10 +10,10 @@ cdef extern from "primitiv/cpu_device.h" namespace "primitiv":
 
 
 cdef class _CPUDevice(_Device):
-    cdef CPUDevice *ptr_cpudevice
+    pass
 
 
-cdef inline _CPUDevice wrapCPUDevice(CPUDevice *ptr) except +:
+cdef inline _CPUDevice wrapCPUDevice(CPUDevice *wrapped) except +:
     cdef _CPUDevice cpu_device = _CPUDevice.__new__(_CPUDevice)
-    cpu_device.ptr = ptr
+    cpu_device.wrapped = wrapped
     return cpu_device

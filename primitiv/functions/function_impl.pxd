@@ -65,55 +65,55 @@ cdef extern from "primitiv/function_impl.h" namespace "primitiv::functions":
 
 
 cdef class _Input(_Function):
-    cdef Input *ptr_input
+    pass
 
 cdef class _ParameterInput(_Function):
-    cdef ParameterInput *ptr_parameterinput
+    pass
 
 cdef class _Copy(_Function):
-    cdef Copy *ptr_copy
+    pass
 
 cdef class _Constant(_Function):
-    cdef Constant *ptr_constant
+    pass
 
 cdef class _IdentityMatrix(_Function):
-    cdef IdentityMatrix *ptr_identitymatrix
+    pass
 
 cdef class _RandomBernoulli(_Function):
-    cdef RandomBernoulli *ptr_randombernoulli
+    pass
 
 cdef class _RandomUniform(_Function):
-    cdef RandomUniform *ptr_randomuniform
+    pass
 
 cdef class _RandomNormal(_Function):
-    cdef RandomNormal *ptr_randomnormal
+    pass
 
 cdef class _RandomLogNormal(_Function):
-    cdef RandomLogNormal *ptr_randomlognormal
+    pass
 
 cdef class _Pick(_Function):
-    cdef Pick *ptr_pick
+    pass
 
 cdef class _Slice(_Function):
-    cdef Slice *ptr_slice
+    pass
 
 cdef class _Concat(_Function):
-    cdef Concat *ptr_concat
+    pass
 
 cdef class _Reshape(_Function):
-    cdef Reshape *ptr_reshape
+    pass
 
 cdef class _Sum(_Function):
-    cdef Sum *ptr_sum
+    pass
 
 cdef class _LogSumExp(_Function):
-    cdef LogSumExp *ptr_logsumexp
+    pass
 
 cdef class _Broadcast(_Function):
-    cdef Broadcast *ptr_broadcast
+    pass
 
 cdef class _SoftmaxCrossEntropy(_Function):
-    cdef SoftmaxCrossEntropy *ptr_softmaxcrossentropy
+    pass
 
 cdef class _SparseSoftmaxCrossEntropy(_Function):
-    cdef SparseSoftmaxCrossEntropy *ptr_sparsesoftmaxcrossentropy
+    pass

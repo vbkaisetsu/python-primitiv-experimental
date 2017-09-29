@@ -18,53 +18,53 @@ cdef class _Tensor:
 
     def __init__(self, src = None):
         if src == None:
-            self.ptr = Tensor()
+            self.wrapped = Tensor()
         else:
-            self.ptr = Tensor((<_Tensor> src).ptr)
+            self.wrapped = Tensor((<_Tensor> src).wrapped)
         return
 
     def valid(self):
-        return self.ptr.valid()
+        return self.wrapped.valid()
 
     def shape(self):
-        return wrapShape(self.ptr.shape())
+        return wrapShape(self.wrapped.shape())
 
     def device(self):
-        return wrapDevice(&self.ptr.device())
+        return wrapDevice(&self.wrapped.device())
 
     #def data(self):
-        #return self.ptr.data()
+        #return self.wrapped.data()
 
     def to_vector(self):
-        return self.ptr.to_vector()
+        return self.wrapped.to_vector()
 
     def __iter__(self):
-        return iter(self.ptr.to_vector())
+        return iter(self.wrapped.to_vector())
 
     def reset(self, float k):
-        self.ptr.reset(k)
+        self.wrapped.reset(k)
 
     #def reset_by_array(self, vector[float] values):
-        #self.ptr.reset_by_array(values)
+        #self.wrapped.reset_by_array(values)
 
     def reset_by_vector(self, vector[float] values):
-        self.ptr.reset_by_vector(values)
+        self.wrapped.reset_by_vector(values)
 
     def reshape(self, _Shape new_shape):
-        self.ptr = self.ptr.reshape(new_shape.ptr)
+        self.wrapped = self.wrapped.reshape(new_shape.wrapped)
         return self
 
     def flatten(self):
-        return wrapTensor(self.ptr.flatten())
+        return wrapTensor(self.wrapped.flatten())
 
     def __imul__(self, float k):
-        self.ptr = tensor_inplace_multiply_const(self.ptr, k)
+        self.wrapped = tensor_inplace_multiply_const(self.wrapped, k)
         return self
 
     def __iadd__(self, _Tensor x):
-        self.ptr = tensor_inplace_add(self.ptr, x.ptr)
+        self.wrapped = tensor_inplace_add(self.wrapped, x.wrapped)
         return self
 
     def __isub__(self, _Tensor x):
-        self.ptr = tensor_inplace_subtract(self.ptr, x.ptr)
+        self.wrapped = tensor_inplace_subtract(self.wrapped, x.wrapped)
         return self

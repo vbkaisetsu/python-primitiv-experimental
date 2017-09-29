@@ -9,242 +9,335 @@ from primitiv.parameter cimport _Parameter
 
 cdef class _Input(_Function):
     def __cinit__(self, _Shape shape, vector[float] data, _Device device):
-        self.ptr_input = new Input(shape.ptr, data, device.ptr[0])
-        self.ptr = self.ptr_input
+        self.wrapped = new Input(shape.wrapped, data, device.wrapped[0])
+        if self.wrapped is NULL:
+            raise MemoryError()
 
     def __dealloc__(self):
-        del self.ptr
+        cdef Input *temp
+        if self.wrapped is not NULL:
+            temp = <Input*> self.wrapped
+            del temp
+            self.wrapped = NULL
 
     def get_device(self):
-        return wrapDevice(self.ptr_input.get_device())
+        return wrapDevice((<Input*> self.wrapped).get_device())
 
     def name(self):
-        return self.ptr_input.name().decode("utf-8")
+        return (<Input*> self.wrapped).name().decode("utf-8")
 
 
 cdef class _ParameterInput(_Function):
     def __cinit__(self, _Parameter param):
-        self.ptr_parameterinput = new ParameterInput(param.ptr[0])
-        self.ptr = self.ptr_parameterinput
+        self.wrapped = new ParameterInput(param.wrapped[0])
+        if self.wrapped is NULL:
+            raise MemoryError()
+
+    def __dealloc__(self):
+        cdef ParameterInput *temp
+        if self.wrapped is not NULL:
+            temp = <ParameterInput*> self.wrapped
+            del temp
+            self.wrapped = NULL
 
     def get_device(self):
-        return wrapDevice(self.ptr_parameterinput.get_device())
+        return wrapDevice((<ParameterInput*> self.wrapped).get_device())
 
     def get_inner_value(self):
-        return wrapTensor(self.ptr_parameterinput.get_inner_value()[0])
+        return wrapTensor((<ParameterInput*> self.wrapped).get_inner_value()[0])
 
     def name(self):
-        return self.ptr_parameterinput.name().decode("utf-8")
+        return (<ParameterInput*> self.wrapped).name().decode("utf-8")
 
 
 cdef class _Copy(_Function):
     def __init__(self, _Device device):
-        self.ptr_copy = new Copy(device.ptr[0])
-        self.ptr = self.ptr_copy
+        self.wrapped = new Copy(device.wrapped[0])
+        if self.wrapped is NULL:
+            raise MemoryError()
 
     def __dealloc__(self):
-        del self.ptr
+        cdef Copy *temp
+        if self.wrapped is not NULL:
+            temp = <Copy*> self.wrapped
+            del temp
+            self.wrapped = NULL
 
     def get_device(self):
-        return wrapDevice(self.ptr_copy.get_device())
+        return wrapDevice((<Copy*> self.wrapped).get_device())
 
     def name(self):
-        return self.ptr_input.name().decode("utf-8")
+        return (<Copy*> self.wrapped).name().decode("utf-8")
 
 
 cdef class _Constant(_Function):
     def __cinit__(self, _Shape shape, float k, _Device device):
-        self.ptr_constant = new Constant(shape.ptr, k, device.ptr[0])
-        self.ptr = self.ptr_constant
+        self.wrapped = new Constant(shape.wrapped, k, device.wrapped[0])
+        if self.wrapped is NULL:
+            raise MemoryError()
 
     def __dealloc__(self):
-        del self.ptr
+        cdef Constant *temp
+        if self.wrapped is not NULL:
+            temp = <Constant*> self.wrapped
+            del temp
+            self.wrapped = NULL
 
     def get_device(self):
-        return wrapDevice(self.ptr_constant.get_device())
+        return wrapDevice((<Constant*> self.wrapped).get_device())
 
     def name(self):
-        return self.ptr_constant.name().decode("utf-8")
+        return (<Constant*> self.wrapped).name().decode("utf-8")
 
 
 cdef class _IdentityMatrix(_Function):
     def __cinit__(self, unsigned size, _Device device):
-        self.ptr_identitymatrix = new IdentityMatrix(size, device.ptr[0])
-        self.ptr = self.ptr_identitymatrix
+        self.wrapped = new IdentityMatrix(size, device.wrapped[0])
+        if self.wrapped is NULL:
+            raise MemoryError()
 
     def __dealloc__(self):
-        del self.ptr
+        cdef IdentityMatrix *temp
+        if self.wrapped is not NULL:
+            temp = <IdentityMatrix*> self.wrapped
+            del temp
+            self.wrapped = NULL
 
     def get_device(self):
-        return wrapDevice(self.ptr_identitymatrix.get_device())
+        return wrapDevice((<IdentityMatrix*> self.wrapped).get_device())
 
     def name(self):
-        return self.ptr_identitymatrix.name().decode("utf-8")
+        return (<IdentityMatrix*> self.wrapped).name().decode("utf-8")
 
 
 cdef class _RandomBernoulli(_Function):
     def __cinit__(self, _Shape shape, float p, _Device device):
-        self.ptr_randombernoulli = new RandomBernoulli(shape.ptr, p, device.ptr[0])
-        self.ptr = self.ptr_randombernoulli
+        self.wrapped = new RandomBernoulli(shape.wrapped, p, device.wrapped[0])
+        if self.wrapped is NULL:
+            raise MemoryError()
 
     def __dealloc__(self):
-        del self.ptr
+        cdef RandomBernoulli *temp
+        if self.wrapped is not NULL:
+            temp = <RandomBernoulli*> self.wrapped
+            del temp
+            self.wrapped = NULL
 
     def get_device(self):
-        return wrapDevice(self.ptr_randombernoulli.get_device())
+        return wrapDevice((<RandomBernoulli*> self.wrapped).get_device())
 
     def name(self):
-        return self.ptr_randombernoulli.name().decode("utf-8")
+        return (<RandomBernoulli*> self.wrapped).name().decode("utf-8")
 
 
 cdef class _RandomUniform(_Function):
     def __cinit__(self, _Shape shape, float lower, float upper, _Device device):
-        self.ptr_randomuniform = new RandomUniform(shape.ptr, lower, upper, device.ptr[0])
-        self.ptr = self.ptr_randomuniform
+        self.wrapped = new RandomUniform(shape.wrapped, lower, upper, device.wrapped[0])
+        if self.wrapped is NULL:
+            raise MemoryError()
 
     def __dealloc__(self):
-        del self.ptr
+        cdef RandomUniform *temp
+        if self.wrapped is not NULL:
+            temp = <RandomUniform*> self.wrapped
+            del temp
+            self.wrapped = NULL
 
     def get_device(self):
-        return wrapDevice(self.ptr_randomuniform.get_device())
+        return wrapDevice((<RandomUniform*> self.wrapped).get_device())
 
     def name(self):
-        return self.ptr_randomuniform.name().decode("utf-8")
+        return (<RandomUniform*> self.wrapped).name().decode("utf-8")
 
 
 cdef class _RandomNormal(_Function):
     def __cinit__(self, _Shape shape, float mean, float sd, _Device device):
-        self.ptr_randomnormal = new RandomNormal(shape.ptr, mean, sd, device.ptr[0])
-        self.ptr = self.ptr_randomnormal
+        self.wrapped = new RandomNormal(shape.wrapped, mean, sd, device.wrapped[0])
+        if self.wrapped is NULL:
+            raise MemoryError()
 
     def __dealloc__(self):
-        del self.ptr
+        cdef RandomNormal *temp
+        if self.wrapped is not NULL:
+            temp = <RandomNormal*> self.wrapped
+            del temp
+            self.wrapped = NULL
 
     def get_device(self):
-        return wrapDevice(self.ptr_randomnormal.get_device())
+        return wrapDevice((<RandomNormal*> self.wrapped).get_device())
 
     def name(self):
-        return self.ptr_randomnormal.name().decode("utf-8")
+        return (<RandomNormal*> self.wrapped).name().decode("utf-8")
 
 
 cdef class _RandomLogNormal(_Function):
     def __cinit__(self, _Shape shape, float mean, float sd, _Device device):
-        self.ptr_randomlognormal = new RandomLogNormal(shape.ptr, mean, sd, device.ptr[0])
-        self.ptr = self.ptr_randomlognormal
+        self.wrapped = new RandomLogNormal(shape.wrapped, mean, sd, device.wrapped[0])
+        if self.wrapped is NULL:
+            raise MemoryError()
 
     def __dealloc__(self):
-        del self.ptr
+        cdef RandomLogNormal *temp
+        if self.wrapped is not NULL:
+            temp = <RandomLogNormal*> self.wrapped
+            del temp
+            self.wrapped = NULL
 
     def get_device(self):
-        return wrapDevice(self.ptr_randomlognormal.get_device())
+        return wrapDevice((<RandomLogNormal*> self.wrapped).get_device())
 
     def name(self):
-        return self.ptr_randomlognormal.name().decode("utf-8")
+        return (<RandomLogNormal*> self.wrapped).name().decode("utf-8")
 
 
 cdef class _Pick(_Function):
     def __cinit__(self, vector[unsigned] ids, unsigned dim):
-        self.ptr_pick = new Pick(ids, dim)
-        self.ptr = self.ptr_pick
+        self.wrapped = new Pick(ids, dim)
+        if self.wrapped is NULL:
+            raise MemoryError()
 
     def __dealloc__(self):
-        del self.ptr
+        cdef Pick *temp
+        if self.wrapped is not NULL:
+            temp = <Pick*> self.wrapped
+            del temp
+            self.wrapped = NULL
 
     def name(self):
-        return self.ptr_pick.name().decode("utf-8")
+        return (<Pick*> self.wrapped).name().decode("utf-8")
 
 
 cdef class _Slice(_Function):
     def __cinit__(self, unsigned dim, unsigned lower, unsigned upper):
-        self.ptr_slice = new Slice(dim, lower, upper)
-        self.ptr = self.ptr_slice
+        self.wrapped = new Slice(dim, lower, upper)
+        if self.wrapped is NULL:
+            raise MemoryError()
 
     def __dealloc__(self):
-        del self.ptr
+        cdef Slice *temp
+        if self.wrapped is not NULL:
+            temp = <Slice*> self.wrapped
+            del temp
+            self.wrapped = NULL
 
     def name(self):
-        return self.ptr_slice.name().decode("utf-8")
+        return (<Slice*> self.wrapped).name().decode("utf-8")
 
 
 cdef class _Concat(_Function):
     def __cinit__(self, unsigned dim):
-        self.ptr_concat = new Concat(dim)
-        self.ptr = self.ptr_concat
+        self.wrapped = new Concat(dim)
+        if self.wrapped is NULL:
+            raise MemoryError()
 
     def __dealloc__(self):
-        del self.ptr
+        cdef Concat *temp
+        if self.wrapped is not NULL:
+            temp = <Concat*> self.wrapped
+            del temp
+            self.wrapped = NULL
 
     def name(self):
-        return self.ptr_concat.name().decode("utf-8")
+        return (<Concat*> self.wrapped).name().decode("utf-8")
 
 
 cdef class _Reshape(_Function):
     def __cinit__(self, _Shape shape):
-        self.ptr_reshape = new Reshape(shape.ptr)
-        self.ptr = self.ptr_reshape
+        self.wrapped = new Reshape(shape.wrapped)
+        if self.wrapped is NULL:
+            raise MemoryError()
 
     def __dealloc__(self):
-        del self.ptr
+        cdef Reshape *temp
+        if self.wrapped is not NULL:
+            temp = <Reshape*> self.wrapped
+            del temp
+            self.wrapped = NULL
 
     def name(self):
-        return self.ptr_reshape.name().decode("utf-8")
+        return (<Reshape*> self.wrapped).name().decode("utf-8")
 
 
 cdef class _Sum(_Function):
     def __cinit__(self, unsigned dim):
-        self.ptr_sum = new Sum(dim)
-        self.ptr = self.ptr_sum
+        self.wrapped = new Sum(dim)
+        if self.wrapped is NULL:
+            raise MemoryError()
 
     def __dealloc__(self):
-        del self.ptr
+        cdef Sum *temp
+        if self.wrapped is not NULL:
+            temp = <Sum*> self.wrapped
+            del temp
+            self.wrapped = NULL
 
     def name(self):
-        return self.ptr_sum.name().decode("utf-8")
+        return (<Sum*> self.wrapped).name().decode("utf-8")
 
 
 cdef class _LogSumExp(_Function):
     def __cinit__(self, unsigned dim):
-        self.ptr_logsumexp = new LogSumExp(dim)
-        self.ptr = self.ptr_logsumexp
+        self.wrapped = new LogSumExp(dim)
+        if self.wrapped is NULL:
+            raise MemoryError()
 
     def __dealloc__(self):
-        del self.ptr
+        cdef LogSumExp *temp
+        if self.wrapped is not NULL:
+            temp = <LogSumExp*> self.wrapped
+            del temp
+            self.wrapped = NULL
 
     def name(self):
-        return self.ptr_logsumexp.name().decode("utf-8")
+        return (<LogSumExp*> self.wrapped).name().decode("utf-8")
 
 
 cdef class _Broadcast(_Function):
     def __cinit__(self, unsigned dim, unsigned size):
-        self.ptr_broadcast = new Broadcast(dim, size)
-        self.ptr = self.ptr_broadcast
+        self.wrapped = new Broadcast(dim, size)
+        if self.wrapped is NULL:
+            raise MemoryError()
 
     def __dealloc__(self):
-        del self.ptr
+        cdef Broadcast *temp
+        if self.wrapped is not NULL:
+            temp = <Broadcast*> self.wrapped
+            del temp
+            self.wrapped = NULL
 
     def name(self):
-        return self.ptr_broadcast.name().decode("utf-8")
+        return (<Broadcast*> self.wrapped).name().decode("utf-8")
 
 
 cdef class _SoftmaxCrossEntropy(_Function):
     def __cinit__(self, unsigned dim):
-        self.ptr_softmaxcrossentropy = new SoftmaxCrossEntropy(dim)
-        self.ptr = self.ptr_softmaxcrossentropy
+        self.wrapped = new SoftmaxCrossEntropy(dim)
+        if self.wrapped is NULL:
+            raise MemoryError()
 
     def __dealloc__(self):
-        del self.ptr
+        cdef SoftmaxCrossEntropy *temp
+        if self.wrapped is not NULL:
+            temp = <SoftmaxCrossEntropy*> self.wrapped
+            del temp
+            self.wrapped = NULL
 
     def name(self):
-        return self.ptr_softmaxcrossentropy.name().decode("utf-8")
+        return (<SoftmaxCrossEntropy*> self.wrapped).name().decode("utf-8")
 
 
 cdef class _SparseSoftmaxCrossEntropy(_Function):
     def __cinit__(self, vector[unsigned] ids, unsigned dim):
-        self.ptr_sparsesoftmaxcrossentropy = new SparseSoftmaxCrossEntropy(ids, dim)
-        self.ptr = self.ptr_sparsesoftmaxcrossentropy
+        self.wrapped = new SparseSoftmaxCrossEntropy(ids, dim)
+        if self.wrapped is NULL:
+            raise MemoryError()
 
     def __dealloc__(self):
-        del self.ptr
+        cdef SparseSoftmaxCrossEntropy *temp
+        if self.wrapped is not NULL:
+            temp = <SparseSoftmaxCrossEntropy*> self.wrapped
+            del temp
+            self.wrapped = NULL
 
     def name(self):
-        return self.ptr_sparsesoftmaxcrossentropy.name().decode("utf-8")
+        return (<SparseSoftmaxCrossEntropy*> self.wrapped).name().decode("utf-8")
