@@ -10,20 +10,21 @@ from primitiv.parameter cimport _Parameter
 class _operators:
 
     @staticmethod
-    def input_vector(shape, vector[float] data, _Device device = None, _Graph g = None):
-        if device == None:
-            device = _Device.get_default_device()
-        if g != None:
-            return wrapNode(Node_input_vector(normShape(shape).wrapped, data, device.wrapped[0], g.wrapped[0]))
+    def input(shape = None, data = None, _Device device = None, _Parameter param = None, _Graph g = None):
+        if shape is not None and data is not None and param is None:
+            if device == None:
+                device = _Device.get_default_device()
+            if g != None:
+                return wrapNode(Node_input_vector(normShape(shape).wrapped, <vector[float]> data, device.wrapped[0], g.wrapped[0]))
+            else:
+                return wrapNode(Node_input_vector(normShape(shape).wrapped, <vector[float]> data, device.wrapped[0]))
+        elif shape is None and data is None and param is not None:
+            if g != None:
+                return wrapNode(Node_input_parameter(param.wrapped[0], g.wrapped[0]))
+            else:
+                return wrapNode(Node_input_parameter(param.wrapped[0]))
         else:
-            return wrapNode(Node_input_vector(normShape(shape).wrapped, data, device.wrapped[0]))
-
-    @staticmethod
-    def input_parameter(_Parameter param, _Graph g = None):
-        if g != None:
-            return wrapNode(Node_input_parameter(param.wrapped[0], g.wrapped[0]))
-        else:
-            return wrapNode(Node_input_parameter(param.wrapped[0]))
+            raise ValueError("Invalid arguments")
 
     @staticmethod
     def pick(_Node x, vector[unsigned] ids, unsigned dim):
