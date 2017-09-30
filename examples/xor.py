@@ -45,14 +45,14 @@ def main():
                 y = F.matmul(w2, h) + b2
 
                 # Calculates values.
-                y_val = list(g.forward(y))
+                y_val = g.forward(y).to_list()
                 print("epoch ", i, ":")
                 for j in range(4):
                     print("  [", j, "]: ", y_val[j])
                 t = F.input_vector(Shape([], 4), output_data);
                 diff = t - y
                 loss = F.batch.mean(diff * diff)
-                loss_val = list(g.forward(loss))[0]
+                loss_val = g.forward(loss).to_list()[0]
                 print("  loss: ", loss_val)
                 trainer.reset_gradients()
                 g.backward(loss)
