@@ -60,6 +60,7 @@ cdef class _Node:
 
 cdef class _Graph:
     cdef Graph *wrapped
+    cdef _Graph with_graph_stack
 
 
 cdef inline _Node wrapNode(Node wrapped) except +:

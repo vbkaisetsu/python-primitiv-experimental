@@ -95,6 +95,7 @@ cdef extern from "primitiv/device.h" namespace "primitiv::Device":
 
 cdef class _Device:
     cdef Device *wrapped
+    cdef _Device with_device_stack
 
 
 cdef inline _Device wrapDevice(Device *wrapped) except +:

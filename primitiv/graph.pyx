@@ -125,6 +125,18 @@ cdef class _Graph:
         set_default_graph(g.wrapped[0])
         return
 
+    def __enter__(self):
+        try:
+            self.with_graph_stack = _Graph.get_default_graph()
+        except RuntimeError:
+            self.with_graph_stack = None
+        _Graph.set_default_graph(self)
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        _Graph.set_default_graph(self.with_graph_stack)
+        return False
+
     def add_function(self, _Function func, args):
         cdef vector[Node] vec
         cdef _Node x

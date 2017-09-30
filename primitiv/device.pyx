@@ -17,6 +17,18 @@ cdef class _Device:
         Device_set_default_device(dev.wrapped[0])
         return
 
+    def __enter__(self):
+        try:
+            self.with_device_stack = _Device.get_default_device()
+        except RuntimeError:
+            self.with_device_stack = None
+        _Device.set_default_device(self)
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        _Device.set_default_device(self.with_device_stack)
+        return False
+
     def new_tensor(self, _Shape shape, float k = 0):
         return wrapTensor(self.wrapped.new_tensor(shape.wrapped, k))
 

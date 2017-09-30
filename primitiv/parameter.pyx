@@ -8,6 +8,7 @@ from primitiv.parameter cimport Parameter_load, Parameter
 
 
 cdef class _Parameter:
+
     def __cinit__(self, str name, shape, init = None, _Device device = None):
         cdef _Shape _shape = shape if isinstance(shape, _Shape) else _Shape(shape)
         if init == None:
