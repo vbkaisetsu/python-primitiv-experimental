@@ -1,17 +1,7 @@
 from libcpp.vector cimport vector
-from libcpp.string cimport string
-from libcpp cimport bool
-from libcpp.cast cimport const_cast
 
 from primitiv.device cimport wrapDevice
-from primitiv.shape import _Shape
-from primitiv.shape cimport _Shape, wrapShape
-
-from primitiv.tensor cimport (Tensor,
-                     tensor_inplace_multiply_const,
-                     tensor_inplace_add,
-                     tensor_inplace_subtract
-)
+from primitiv.shape cimport _Shape, wrapShape, normShape
 
 
 cdef class _Tensor:
@@ -51,7 +41,7 @@ cdef class _Tensor:
         self.wrapped.reset_by_vector(values)
 
     def reshape(self, _Shape new_shape):
-        self.wrapped = self.wrapped.reshape(new_shape.wrapped)
+        self.wrapped = self.wrapped.reshape(normShape(new_shape).wrapped)
         return self
 
     def flatten(self):

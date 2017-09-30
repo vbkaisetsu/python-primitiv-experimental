@@ -2,7 +2,7 @@ from libcpp.vector cimport vector
 
 from primitiv.device cimport get_default_device as Device_get_default_device
 from primitiv.device cimport set_default_device as Device_set_default_device
-from primitiv.shape cimport _Shape
+from primitiv.shape cimport normShape
 from primitiv.tensor cimport wrapTensor, _Tensor
 
 
@@ -29,14 +29,14 @@ cdef class _Device:
         _Device.set_default_device(self.with_device_stack)
         return False
 
-    def new_tensor(self, _Shape shape, float k = 0):
-        return wrapTensor(self.wrapped.new_tensor(shape.wrapped, k))
+    def new_tensor(self, shape, float k = 0):
+        return wrapTensor(self.wrapped.new_tensor(normShape(shape).wrapped, k))
 
-    #def new_tensor_by_array(self, _Shape shape, float values[])
+    #def new_tensor_by_array(self, shape, float values[])
         #return wrapTensor(self.wrapped.new_tensor_by_array(const Shape &shape, const float values[]))
 
-    def new_tensor_by_vector(self, _Shape shape, vector[float] values):
-        return wrapTensor(self.wrapped.new_tensor_by_vector(shape.wrapped, values))
+    def new_tensor_by_vector(self, shape, vector[float] values):
+        return wrapTensor(self.wrapped.new_tensor_by_vector(normShape(shape).wrapped, values))
 
     def copy_tensor(self, _Tensor x):
         return wrapTensor(self.wrapped.copy_tensor(x.wrapped))
@@ -44,17 +44,17 @@ cdef class _Device:
     def identity(self, unsigned size):
         return wrapTensor(self.wrapped.identity(size))
 
-    def random_bernoulli(self, _Shape shape, float p):
-        return wrapTensor(self.wrapped.random_bernoulli(shape.wrapped, p))
+    def random_bernoulli(self, shape, float p):
+        return wrapTensor(self.wrapped.random_bernoulli(normShape(shape).wrapped, p))
 
-    def random_uniform(self, _Shape shape, float lower, float upper):
-        return wrapTensor(self.wrapped.random_uniform(shape.wrapped, lower, upper))
+    def random_uniform(self, shape, float lower, float upper):
+        return wrapTensor(self.wrapped.random_uniform(normShape(shape).wrapped, lower, upper))
 
-    def random_normal(self, _Shape shape, float mean, float sd):
-        return wrapTensor(self.wrapped.random_normal(shape.wrapped, mean, sd))
+    def random_normal(self, shape, float mean, float sd):
+        return wrapTensor(self.wrapped.random_normal(normShape(shape).wrapped, mean, sd))
 
-    def random_log_normal(self, _Shape shape, float mean, float sd):
-        return wrapTensor(self.wrapped.random_log_normal(shape.wrapped, mean, sd))
+    def random_log_normal(self, shape, float mean, float sd):
+        return wrapTensor(self.wrapped.random_log_normal(normShape(shape).wrapped, mean, sd))
 
     def pick_fw(self, _Tensor x, vector[unsigned] ids, unsigned dim):
         return wrapTensor(self.wrapped.pick_fw(x.wrapped, ids, dim))

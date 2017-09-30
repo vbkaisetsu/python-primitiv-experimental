@@ -3,29 +3,27 @@ from libcpp cimport bool
 
 from primitiv.device cimport _Device, wrapDevice, get_default_device
 from primitiv.tensor cimport wrapTensor
-from primitiv.shape cimport wrapShape
-from primitiv.parameter cimport Parameter_load, Parameter
+from primitiv.shape cimport wrapShape, normShape
 
 
 cdef class _Parameter:
 
     def __cinit__(self, str name, shape, init = None, _Device device = None):
-        cdef _Shape _shape = shape if isinstance(shape, _Shape) else _Shape(shape)
         if init == None:
             if device == None:
-                self.wrapped = new Parameter(<string> name.encode("utf-8"), _shape.wrapped, get_default_device())
+                self.wrapped = new Parameter(<string> name.encode("utf-8"), normShape(shape).wrapped, get_default_device())
             else:
-                self.wrapped = new Parameter(<string> name.encode("utf-8"), _shape.wrapped, device.wrapped[0])
+                self.wrapped = new Parameter(<string> name.encode("utf-8"), normShape(shape).wrapped, device.wrapped[0])
         elif isinstance(init, list):
             if device == None:
-                self.wrapped = new Parameter(<string> name.encode("utf-8"), _shape.wrapped, <vector[float]> init, get_default_device())
+                self.wrapped = new Parameter(<string> name.encode("utf-8"), normShape(shape).wrapped, <vector[float]> init, get_default_device())
             else:
-                self.wrapped = new Parameter(<string> name.encode("utf-8"), _shape.wrapped, <vector[float]> init, device.wrapped[0])
+                self.wrapped = new Parameter(<string> name.encode("utf-8"), normShape(shape).wrapped, <vector[float]> init, device.wrapped[0])
         elif isinstance(init, _Initializer):
             if device == None:
-                self.wrapped = new Parameter(<string> name.encode("utf-8"), _shape.wrapped, (<_Initializer> init).wrapped[0], get_default_device())
+                self.wrapped = new Parameter(<string> name.encode("utf-8"), normShape(shape).wrapped, (<_Initializer> init).wrapped[0], get_default_device())
             else:
-                self.wrapped = new Parameter(<string> name.encode("utf-8"), _shape.wrapped, (<_Initializer> init).wrapped[0], device.wrapped[0])
+                self.wrapped = new Parameter(<string> name.encode("utf-8"), normShape(shape).wrapped, (<_Initializer> init).wrapped[0], device.wrapped[0])
         else:
             raise TypeError("Argument 'init' has incorrect type (list or Initializer)")
         if self.wrapped is NULL:
@@ -54,9 +52,8 @@ cdef class _Parameter:
         self.wrapped.reset_gradient()
         return
 
-    def add_stats(self, str name, _Shape shape):
-        cdef _Shape _shape = shape if isinstance(shape, _Shape) else _Shape(shape)
-        self.wrapped.add_stats(<string> name.encode("utf-8"), _shape.wrapped)
+    def add_stats(self, str name, shape):
+        self.wrapped.add_stats(<string> name.encode("utf-8"), normShape(shape).wrapped)
         return
 
     def has_stats(self, str name):

@@ -1,21 +1,13 @@
-from libcpp.vector cimport vector
-from libcpp.string cimport string
-from libcpp cimport bool
-from libcpp.cast cimport const_cast
-
-from primitiv.device cimport wrapDevice
-from primitiv.shape import _Shape
-from primitiv.trainer cimport wrapTrainer
-from primitiv.trainer cimport load as Trainer_load
+from trainer cimport load as Trainer_load
 
 
 cdef class _Trainer:
 
-    def load(self, string &path):
-        return wrapTrainer(Trainer_load(path).get())
+    def load(self, str path):
+        return wrapTrainer(Trainer_load(path.encode("utf-8")).get())
 
-    def save(self, string &path):
-        self.wrapped.save(path)
+    def save(self, str path):
+        self.wrapped.save(path.encode("utf-8"))
         return
 
     def name(self):

@@ -1,6 +1,6 @@
 from libcpp.vector cimport vector
 
-from primitiv.shape cimport Shape, _Shape, wrapShape
+from primitiv.shape cimport Shape, wrapShape, normShape
 from primitiv.tensor cimport wrapTensor, _Tensor
 from primitiv.device cimport wrapDevice
 
@@ -9,9 +9,8 @@ cdef class _Function:
 
     def forward_shape(self, args):
         cdef vector[const Shape *] vec
-        cdef _Shape x
         for x in args:
-            vec.push_back(&x.wrapped)
+            vec.push_back(&normShape(x).wrapped)
         return wrapShape(self.wrapped.forward_shape(vec))
 
     def get_device(self):

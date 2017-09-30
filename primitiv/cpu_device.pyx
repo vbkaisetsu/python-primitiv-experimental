@@ -1,10 +1,4 @@
-from libcpp.vector cimport vector
-from libcpp.string cimport string
-from libcpp cimport bool
-from libcpp.cast cimport const_cast
-
-from primitiv.cpu_device cimport CPUDevice
-from primitiv.device cimport _Device, Device
+from primitiv.device cimport _Device
 
 
 cdef class _CPUDevice(_Device):

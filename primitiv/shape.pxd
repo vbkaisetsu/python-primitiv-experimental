@@ -37,3 +37,9 @@ cdef inline _Shape wrapShape(Shape wrapped) except +:
     cdef _Shape shape = _Shape.__new__(_Shape)
     shape.wrapped = wrapped
     return shape
+
+cdef inline _Shape normShape(shapelike):
+    if isinstance(shapelike, _Shape):
+        return shapelike
+    else:
+        return _Shape(shapelike)
