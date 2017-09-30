@@ -5,6 +5,9 @@ from primitiv.shape cimport wrapShape
 from primitiv.tensor cimport wrapTensor
 from primitiv.function cimport _Function
 
+cimport numpy as np
+import numpy as np
+
 
 cdef class _Node:
 
@@ -34,6 +37,15 @@ cdef class _Node:
 
     def to_list(self):
         return self.wrapped.to_vector()
+
+    def to_ndarray(self):
+        cdef vector[float] vec = self.wrapped.to_vector()
+        cdef Shape s = self.wrapped.shape()
+        cdef np.ndarray output = np.empty([s.batch()] + [s[i] for i in range(s.depth())], dtype=np.float32)
+        cdef np.float32_t *np_data = <np.float32_t*> output.data
+        for i in range(s.size()):
+            np_data[i] = vec[i]
+        return output
 
     def __pos__(self):
         return wrapNode(op_node_pos(self.wrapped))

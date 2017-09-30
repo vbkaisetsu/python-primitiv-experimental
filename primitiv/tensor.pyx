@@ -3,6 +3,9 @@ from libcpp.vector cimport vector
 from primitiv.device cimport wrapDevice
 from primitiv.shape cimport _Shape, wrapShape, normShape
 
+cimport numpy as np
+import numpy as np
+
 
 cdef class _Tensor:
 
@@ -27,6 +30,15 @@ cdef class _Tensor:
 
     def to_list(self):
         return self.wrapped.to_vector()
+
+    def to_ndarray(self):
+        cdef vector[float] vec = self.wrapped.to_vector()
+        cdef Shape s = self.wrapped.shape()
+        cdef np.ndarray output = np.empty([s.batch()] + [s[i] for i in range(s.depth())], dtype=np.float32)
+        cdef np.float32_t *np_data = <np.float32_t*> output.data
+        for i in range(s.size()):
+            np_data[i] = vec[i]
+        return output
 
     def reset(self, float k):
         self.wrapped.reset(k)
