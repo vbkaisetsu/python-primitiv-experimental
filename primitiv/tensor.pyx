@@ -25,11 +25,8 @@ cdef class _Tensor:
     #def data(self):
         #return self.wrapped.data()
 
-    def to_vector(self):
+    def to_list(self):
         return self.wrapped.to_vector()
-
-    def __iter__(self):
-        return iter(self.wrapped.to_vector())
 
     def reset(self, float k):
         self.wrapped.reset(k)

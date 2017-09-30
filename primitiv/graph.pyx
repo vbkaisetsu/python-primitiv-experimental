@@ -32,11 +32,8 @@ cdef class _Node:
     def device(self):
         return wrapDevice(&self.wrapped.device())
 
-    def to_vector(self):
+    def to_list(self):
         return self.wrapped.to_vector()
-
-    def __iter__(self):
-        return iter(self.wrapped.to_vector())
 
     def __pos__(self):
         return wrapNode(op_node_pos(self.wrapped))
