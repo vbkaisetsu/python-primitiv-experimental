@@ -4,6 +4,9 @@ from primitiv import operators as F
 from primitiv import initializers as I
 from primitiv import trainers as T
 
+import numpy as np
+
+
 def main():
 
     with CPUDevice():
@@ -19,28 +22,29 @@ def main():
         trainer.add_parameter(pw2)
         trainer.add_parameter(pb2)
 
-        input_data = [
-            1,  1,  # Sample 1
-            1, -1,  # Sample 2
-            -1,  1,  # Sample 3
-            -1, -1,  # Sample 4
-        ]
+        input_data = np.array([
+            [ 1,  1],  # Sample 1
+            [ 1, -1],  # Sample 2
+            [-1,  1],  # Sample 3
+            [-1, -1],  # Sample 4
+        ], dtype=np.float32)
 
-        output_data = [
-            1,  # Label 1
+        output_data = np.array([
+             1,  # Label 1
             -1,  # Label 2
             -1,  # Label 3
-            1,  # Label 4
-        ]
+             1,  # Label 4
+        ], dtype=np.float32)
 
         for i in range(100):
             with Graph() as g:
                 # Builds a computation graph.
-                x = F.input_vector(Shape([2], 4), input_data);
-                w1 = F.input_parameter(pw1)
-                b1 = F.input_parameter(pb1)
-                w2 = F.input_parameter(pw2)
-                b2 = F.input_parameter(pb2)
+                #x = F.input(shape=Shape([2], 4), data=input_data)
+                x = F.input(data=input_data)
+                w1 = F.input(param=pw1)
+                b1 = F.input(param=pb1)
+                w2 = F.input(param=pw2)
+                b2 = F.input(param=pb2)
                 h = F.tanh(F.matmul(w1, x) + b1)
                 y = F.matmul(w2, h) + b2
 
@@ -49,7 +53,8 @@ def main():
                 print("epoch ", i, ":")
                 for j in range(4):
                     print("  [", j, "]: ", y_val[j])
-                t = F.input_vector(Shape([], 4), output_data);
+                    #t = F.input(shape=Shape([], 4), data=output_data)
+                    t = F.input(data=output_data)
                 diff = t - y
                 loss = F.batch.mean(diff * diff)
                 loss_val = g.forward(loss).to_list()[0]
