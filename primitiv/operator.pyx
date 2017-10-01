@@ -147,37 +147,32 @@ class _operators:
         return wrapNode(Node_softmax_cross_entropy(x.wrapped, ids, dim))
 
     @staticmethod
-    def constant(shape, float k, _Device device, _Graph g):
-        return wrapNode(Node_constant(normShape(shape).wrapped, k, device.wrapped[0], g.wrapped[0]))
+    def constant(shape, float k, _Device device, _Graph g = None):
+        if g is None:
+            return wrapNode(Node_constant(normShape(shape).wrapped, k, device.wrapped[0]))
+        else:
+            return wrapNode(Node_constant(normShape(shape).wrapped, k, device.wrapped[0], g.wrapped[0]))
 
     @staticmethod
-    def zeros(shape, _Device device, _Graph g):
-        return wrapNode(Node_zeros(normShape(shape).wrapped, device.wrapped[0], g.wrapped[0]))
+    def zeros(shape, _Device device, _Graph g = None):
+        if g is None:
+            return wrapNode(Node_zeros(normShape(shape).wrapped, device.wrapped[0]))
+        else:
+            return wrapNode(Node_zeros(normShape(shape).wrapped, device.wrapped[0], g.wrapped[0]))
 
     @staticmethod
-    def ones(shape, _Device device, _Graph g):
-        return wrapNode(Node_ones(normShape(shape).wrapped, device.wrapped[0], g.wrapped[0]))
+    def ones(shape, _Device device, _Graph g = None):
+        if g is None:
+            return wrapNode(Node_ones(normShape(shape).wrapped, device.wrapped[0]))
+        else:
+            return wrapNode(Node_ones(normShape(shape).wrapped, device.wrapped[0], g.wrapped[0]))
 
     @staticmethod
-    def identity(unsigned size, _Device device, _Graph g):
-        return wrapNode(Node_identity(size, device.wrapped[0], g.wrapped[0]))
-
-    @staticmethod
-    def constant(shape, float k, _Device device):
-        return wrapNode(Node_constant(normShape(shape).wrapped, k, device.wrapped[0]))
-
-    @staticmethod
-    def zeros(shape, _Device device):
-        return wrapNode(Node_zeros(normShape(shape).wrapped, device.wrapped[0]))
-
-    @staticmethod
-    def ones(shape, _Device device):
-        return wrapNode(Node_ones(normShape(shape).wrapped, device.wrapped[0]))
-
-    @staticmethod
-    def identity(unsigned size, _Device device):
-        return wrapNode(Node_identity(size, device.wrapped[0]))
-
+    def identity(unsigned size, _Device device, _Graph g = None):
+        if g is None:
+            return wrapNode(Node_identity(size, device.wrapped[0]))
+        else:
+            return wrapNode(Node_identity(size, device.wrapped[0], g.wrapped[0]))
 
     class batch:
         @staticmethod
@@ -194,44 +189,39 @@ class _operators:
 
     class random:
         @staticmethod
-        def bernoulli(shape, float p, _Device device, _Graph g):
-            return wrapNode(Node_random_bernoulli(normShape(shape).wrapped, p, device.wrapped[0], g.wrapped[0]))
+        def bernoulli(shape, float p, _Device device, _Graph g = None):
+            if g is None:
+                return wrapNode(Node_random_bernoulli(normShape(shape).wrapped, p, device.wrapped[0]))
+            else:
+                return wrapNode(Node_random_bernoulli(normShape(shape).wrapped, p, device.wrapped[0], g.wrapped[0]))
 
         @staticmethod
-        def bernoulli(shape, float p, _Device device):
-            return wrapNode(Node_random_bernoulli(normShape(shape).wrapped, p, device.wrapped[0]))
+        def uniform(shape, float lower, float upper, _Device device, _Graph g = None):
+            if g is None:
+                return wrapNode(Node_random_uniform(normShape(shape).wrapped, lower, upper, device.wrapped[0]))
+            else:
+                return wrapNode(Node_random_uniform(normShape(shape).wrapped, lower, upper, device.wrapped[0], g.wrapped[0]))
 
         @staticmethod
-        def uniform(shape, float lower, float upper, _Device device, _Graph g):
-            return wrapNode(Node_random_uniform(normShape(shape).wrapped, lower, upper, device.wrapped[0], g.wrapped[0]))
+        def normal(shape, float mean, float sd, _Device device, _Graph g = None):
+            if g is None:
+                return wrapNode(Node_random_normal(normShape(shape).wrapped, mean, sd, device.wrapped[0]))
+            else:
+                return wrapNode(Node_random_normal(normShape(shape).wrapped, mean, sd, device.wrapped[0], g.wrapped[0]))
 
         @staticmethod
-        def uniform(shape, float lower, float upper, _Device device):
-            return wrapNode(Node_random_uniform(normShape(shape).wrapped, lower, upper, device.wrapped[0]))
+        def log_normal(shape, float mean, float sd, _Device device, _Graph g = None):
+            if g is None:
+                return wrapNode(Node_random_log_normal(normShape(shape).wrapped, mean, sd, device.wrapped[0]))
+            else:
+                return wrapNode(Node_random_log_normal(normShape(shape).wrapped, mean, sd, device.wrapped[0], g.wrapped[0]))
 
         @staticmethod
-        def normal(shape, float mean, float sd, _Device device, _Graph g):
-            return wrapNode(Node_random_normal(normShape(shape).wrapped, mean, sd, device.wrapped[0], g.wrapped[0]))
-
-        @staticmethod
-        def normal(shape, float mean, float sd, _Device device):
-            return wrapNode(Node_random_normal(normShape(shape).wrapped, mean, sd, device.wrapped[0]))
-
-        @staticmethod
-        def log_normal(shape, float mean, float sd, _Device device, _Graph g):
-            return wrapNode(Node_random_log_normal(normShape(shape).wrapped, mean, sd, device.wrapped[0], g.wrapped[0]))
-
-        @staticmethod
-        def log_normal(shape, float mean, float sd, _Device device):
-            return wrapNode(Node_random_log_normal(normShape(shape).wrapped, mean, sd, device.wrapped[0]))
-
-        @staticmethod
-        def gumbel(shape, float mu, float beta, _Device device, _Graph g):
-            return wrapNode(Node_random_gumbel(normShape(shape).wrapped, mu, beta, device.wrapped[0], g.wrapped[0]))
-
-        @staticmethod
-        def gumbel(shape, float mu, float beta, _Device device):
-            return wrapNode(Node_random_gumbel(normShape(shape).wrapped, mu, beta, device.wrapped[0]))
+        def gumbel(shape, float mu, float beta, _Device device, _Graph g = None):
+            if g is None:
+                return wrapNode(Node_random_gumbel(normShape(shape).wrapped, mu, beta, device.wrapped[0]))
+            else:
+                return wrapNode(Node_random_gumbel(normShape(shape).wrapped, mu, beta, device.wrapped[0], g.wrapped[0]))
 
     @staticmethod
     def dropout(_Node x, float rate, bool enabled):
