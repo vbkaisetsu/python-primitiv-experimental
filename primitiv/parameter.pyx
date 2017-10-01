@@ -5,15 +5,23 @@ from primitiv.device cimport _Device, wrapDevice, get_default_device
 from primitiv.tensor cimport wrapTensor
 from primitiv.shape cimport wrapShape, normShape
 
+import numpy as np
+
+from utils cimport ndarray_to_vector
+
 
 cdef class _Parameter:
 
-    def __cinit__(self, str name, shape, init = None, _Device device = None):
-        if init == None:
+    def __cinit__(self, str name, shape = None, init = None, _Device device = None):
+        if isinstance(init, np.ndarray):
+            if init.dtype != np.float32:
+                raise TypeError("numpy.ndarray must be constructed from float32 data")
+            if shape is None:
+                shape = _Shape(init.shape[1:], init.shape[0])
             if device == None:
-                self.wrapped = new Parameter(<string> name.encode("utf-8"), normShape(shape).wrapped, get_default_device())
+                self.wrapped = new Parameter(<string> name.encode("utf-8"), normShape(shape).wrapped, ndarray_to_vector(init), get_default_device())
             else:
-                self.wrapped = new Parameter(<string> name.encode("utf-8"), normShape(shape).wrapped, device.wrapped[0])
+                self.wrapped = new Parameter(<string> name.encode("utf-8"), normShape(shape).wrapped, ndarray_to_vector(init), device.wrapped[0])
         elif isinstance(init, list):
             if device == None:
                 self.wrapped = new Parameter(<string> name.encode("utf-8"), normShape(shape).wrapped, <vector[float]> init, get_default_device())
@@ -24,8 +32,13 @@ cdef class _Parameter:
                 self.wrapped = new Parameter(<string> name.encode("utf-8"), normShape(shape).wrapped, (<_Initializer> init).wrapped[0], get_default_device())
             else:
                 self.wrapped = new Parameter(<string> name.encode("utf-8"), normShape(shape).wrapped, (<_Initializer> init).wrapped[0], device.wrapped[0])
+        elif init == None:
+            if device == None:
+                self.wrapped = new Parameter(<string> name.encode("utf-8"), normShape(shape).wrapped, get_default_device())
+            else:
+                self.wrapped = new Parameter(<string> name.encode("utf-8"), normShape(shape).wrapped, device.wrapped[0])
         else:
-            raise TypeError("Argument 'init' has incorrect type (list or Initializer)")
+            raise TypeError("Argument 'init' has incorrect type (list, numpy.ndarray, or Initializer)")
         if self.wrapped is NULL:
             raise MemoryError()
 

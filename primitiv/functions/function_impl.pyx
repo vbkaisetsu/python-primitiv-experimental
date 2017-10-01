@@ -6,12 +6,29 @@ from primitiv.device cimport wrapDevice, _Device
 from primitiv.function cimport _Function
 from primitiv.parameter cimport _Parameter
 
+import numpy as np
+
+from ..utils cimport ndarray_to_vector
+
 
 cdef class _Input(_Function):
-    def __cinit__(self, _Shape shape, vector[float] data, _Device device):
-        self.wrapped = new Input(shape.wrapped, data, device.wrapped[0])
-        if self.wrapped is NULL:
-            raise MemoryError()
+    """
+    Input(shape, data, device):
+     or
+    Input(data, device):
+    """
+    def __cinit__(self, *args):
+        if len(args) == 3:
+            self.wrapped = new Input((<_Shape> args[0]).wrapped, args[1], (<_Device> args[2]).wrapped[0])
+            if self.wrapped is NULL:
+                raise MemoryError()
+        elif len(args) == 2:
+            shape = _Shape(args[0].shape)
+            self.wrapped = new Input(shape.wrapped, ndarray_to_vector(args[0]), (<_Device> args[1]).wrapped[0])
+            if self.wrapped is NULL:
+                raise MemoryError()
+        else:
+            raise TypeError("Input() takes two or three arguments (%d given)" % len(args))
 
     def __dealloc__(self):
         cdef Input *temp
