@@ -6,7 +6,7 @@ from primitiv.shape cimport _Shape, normShape
 from primitiv.graph cimport _Graph, wrapNode, Node, _Node
 from primitiv.parameter cimport _Parameter
 
-from utils cimport ndarray_to_vector
+from utils cimport ndarray_to_vector, ndarray_to_vector_unsigned
 
 cimport numpy as np
 import numpy as np
@@ -155,12 +155,15 @@ class _operators:
         return wrapNode(Node_softmax(x.wrapped, dim))
 
     @staticmethod
-    def softmax_cross_entropy(_Node x, _Node t, unsigned dim):
-        return wrapNode(Node_softmax_cross_entropy(x.wrapped, t.wrapped, dim))
-
-    @staticmethod
-    def softmax_cross_entropy(_Node x, vector[unsigned] ids, unsigned dim):
-        return wrapNode(Node_softmax_cross_entropy(x.wrapped, ids, dim))
+    def softmax_cross_entropy(_Node x, t, unsigned dim):
+        if isinstance(t, _Node):
+            return wrapNode(Node_softmax_cross_entropy(x.wrapped, (<_Node> t).wrapped, dim))
+        elif isinstance(t, list):
+            return wrapNode(Node_softmax_cross_entropy(x.wrapped, <vector[unsigned]> t, dim))
+        elif isinstance(t, np.ndarray) and t.dtype == np.uint32:
+            return wrapNode(Node_softmax_cross_entropy(x.wrapped, ndarray_to_vector_unsigned(t), dim))
+        else:
+            raise TypeError("Argument 't' has incorrect type (list, numpy.ndarray[uint32], or Node)")
 
     @staticmethod
     def constant(shape, float k, _Device device, _Graph g = None):
