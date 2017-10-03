@@ -1,17 +1,7 @@
-
-#include <algorithm>
-#include <cmath>
-#include <fstream>
-#include <iostream>
-#include <random>
-#include <string>
-#include <vector>
-
-#include <primitiv/primitiv.h>
-#include <primitiv/primitiv_cuda.h>
-
+from primitiv import DefaultScopeDevice
+from primitiv import DefaultScopeGraph
 from primitiv import Device
-from primitiv import CUDADevice
+from primitiv import CPUDevice
 from primitiv import Graph
 from primitiv import Node
 from primitiv import Parameter
@@ -19,7 +9,7 @@ from primitiv.trainers import SGD
 from primitiv import Shape
 from primitiv.initializers import Constant
 from primitiv.initializers import XavierUniform
-from primitiv.operators as F
+from primitiv import operators as F
 
 import random
 import sys
@@ -32,9 +22,9 @@ NUM_INPUT_UNITS = 28 * 28
 NUM_HIDDEN_UNITS = 800
 NUM_OUTPUT_UNITS = 10
 BATCH_SIZE = 200
-NUM_TRAIN_BATCHES = NUM_TRAIN_SAMPLES / BATCH_SIZE;
-NUM_TEST_BATCHES = NUM_TEST_SAMPLES / BATCH_SIZE;
-MAX_EPOCH = 100;
+NUM_TRAIN_BATCHES = int(NUM_TRAIN_SAMPLES / BATCH_SIZE)
+NUM_TEST_BATCHES = int(NUM_TEST_SAMPLES / BATCH_SIZE)
+MAX_EPOCH = 100
 
 
 def load_images(filename, n):
@@ -69,7 +59,7 @@ def main():
 
     # Uses GPU.
     #dev = CUDADevice(0)
-    with CPUDevice():
+    with DefaultScopeDevice(CPUDevice()):
 
         # Parameters for the multilayer perceptron.
         pw1 = Parameter("w1", [NUM_HIDDEN_UNITS, NUM_INPUT_UNITS], XavierUniform())
@@ -117,14 +107,16 @@ def main():
 
             # Training loop
             for batch in range(NUM_TRAIN_BATCHES):
-                inputs = train_inputs[ids[batch * BATCH_SIZE : batch * (BATCH_SIZE + 1)]]
-                labels = train_labels[ids[batch * BATCH_SIZE : batch * (BATCH_SIZE + 1)]]
+                print("\rTraining... %d / %d" % (batch + 1, NUM_TRAIN_BATCHES), end="")
+                inputs = train_inputs[ids[batch * BATCH_SIZE : (batch + 1) * BATCH_SIZE]]
+                labels = train_labels[ids[batch * BATCH_SIZE : (batch + 1) * BATCH_SIZE]]
 
                 trainer.reset_gradients()
 
                 # Constructs the graph.
-                with Graph() as g:
-                    y = make_graph(inputs, true)
+                g = Graph()
+                with DefaultScopeGraph(g):
+                    y = make_graph(inputs, True)
                     loss = F.softmax_cross_entropy(y, labels, 0)
                     avg_loss = F.batch.mean(loss)
 
@@ -137,16 +129,19 @@ def main():
 
                     trainer.update()
 
+            print()
+
             match = 0
 
             # Test loop
             for batch in range(NUM_TEST_BATCHES):
+                print("\rTesting... %d / %d" % (batch + 1, NUM_TEST_BATCHES), end="")
                 # Makes a test minibatch.
-                inputs = test_inputs[batch * BATCH_SIZE * NUM_INPUT_UNITS : (batch + 1) * BATCH_SIZE * NUM_INPUT_UNITS]
+                inputs = test_inputs[batch * BATCH_SIZE : (batch + 1) * BATCH_SIZE]
 
                 # Constructs the graph.
                 with Graph() as g:
-                    y = make_graph(inputs, false)
+                    y = make_graph(inputs, False)
 
                     # Gets outputs, argmax, and compares them with the label.
                     y_val = g.forward(y).to_list()
@@ -162,7 +157,7 @@ def main():
                             match += 1
 
             accuracy = 100.0 * match / NUM_TEST_SAMPLES
-            print("epoch %d: accuracy: %.2f%%\n" % (epoch, accuracy))
+            print("\nepoch %d: accuracy: %.2f%%\n" % (epoch, accuracy))
             #pw1.save("mnist-params-w1.param");
             #pb1.save("mnist-params-b1.param");
             #pw2.save("mnist-params-w2.param");
@@ -170,3 +165,7 @@ def main():
             #pbeta.save("mnist-params-beta.param");
             #pgamma.save("mnist-params-gamma.param");
             #cout << "epoch " << epoch << ": saved parameters." << endl;
+
+
+if __name__ == "__main__":
+    main()

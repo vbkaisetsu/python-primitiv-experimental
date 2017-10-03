@@ -1,3 +1,5 @@
+from primitiv import DefaultScopeDevice
+from primitiv import DefaultScopeGraph
 from primitiv import Parameter, Shape, Graph
 from primitiv import Device, CPUDevice
 from primitiv import operators as F
@@ -9,7 +11,7 @@ import numpy as np
 
 def main():
 
-    with CPUDevice():
+    with DefaultScopeDevice(CPUDevice()):
         pw1 = Parameter("w1", [8, 2], I.XavierUniform())
         pb1 = Parameter("b1", [8], I.Constant(0))
         pw2 = Parameter("w2", [1, 8], I.XavierUniform())
@@ -37,7 +39,8 @@ def main():
         ], dtype=np.float32)
 
         for i in range(100):
-            with Graph() as g:
+            g = Graph()
+            with DefaultScopeGraph(g):
                 # Builds a computation graph.
                 #x = F.input(shape=Shape([2], 4), data=input_data)
                 x = F.input(data=input_data)
