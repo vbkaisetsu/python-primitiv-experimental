@@ -34,7 +34,7 @@ cdef class _Tensor:
     def to_ndarray(self):
         cdef vector[float] vec = self.wrapped.to_vector()
         cdef Shape s = self.wrapped.shape()
-        cdef np.ndarray output = np.empty([s.batch()] + [s[i] for i in range(s.depth())], dtype=np.float32)
+        cdef np.ndarray output = np.empty([s.batch()] + [s[i] for i in range(s.depth())], dtype=np.float32, order="F")
         cdef np.float32_t *np_data = <np.float32_t*> output.data
         for i in range(s.size()):
             np_data[i] = vec[i]

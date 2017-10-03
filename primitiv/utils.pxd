@@ -13,10 +13,12 @@ cdef inline vector[float] ndarray_to_vector(np.ndarray array):
     cdef vector[float] result
     cdef np.float32_t *np_data
     cdef unsigned datasize
+    cdef np.ndarray array_tmp
 
     datasize = array.size
     result.resize(datasize)
-    np_data = <np.float32_t*> array.data
+    array_tmp = np.array(array, order="F")
+    np_data = <np.float32_t *> array_tmp.data
     for i in range(datasize):
         result[i] = np_data[i]
     return result
@@ -26,10 +28,12 @@ cdef inline vector[unsigned] ndarray_to_vector_unsigned(np.ndarray array):
     cdef vector[unsigned] result
     cdef unsigned *np_data
     cdef unsigned datasize
+    cdef np.ndarray array_tmp
 
     datasize = array.size
     result.resize(datasize)
-    np_data = <unsigned*> array.data
+    array_tmp = np.array(array, order="F")
+    np_data = <unsigned*> array_tmp.data
     for i in range(datasize):
         result[i] = np_data[i]
     return result
