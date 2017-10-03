@@ -49,11 +49,6 @@ cdef extern from "primitiv/graph.h" namespace "primitiv":
         unsigned num_functions() except +
 
 
-cdef extern from "primitiv/graph.h" namespace "primitiv::Graph":
-    Graph &get_default_graph() except +
-    void set_default_graph(Graph &g) except +
-
-
 cdef class _Node:
     cdef Node wrapped
 

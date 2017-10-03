@@ -75,6 +75,11 @@ ext_modules=[
               language="c++",
               libraries=["primitiv"]
     ),
+    Extension("primitiv.default_scope",
+              sources=["primitiv/default_scope.pyx"],
+              language="c++",
+              libraries=["primitiv"]
+    ),
 ]
 
 setup(

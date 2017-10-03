@@ -1,33 +1,10 @@
 from libcpp.vector cimport vector
 
-from primitiv.device cimport get_default_device as Device_get_default_device
-from primitiv.device cimport set_default_device as Device_set_default_device
 from primitiv.shape cimport normShape
 from primitiv.tensor cimport wrapTensor, _Tensor
 
 
 cdef class _Device:
-
-    @staticmethod
-    def get_default_device():
-        return wrapDevice(&Device_get_default_device())
-
-    @staticmethod
-    def set_default_device(_Device dev):
-        Device_set_default_device(dev.wrapped[0])
-        return
-
-    def __enter__(self):
-        try:
-            self.with_device_stack = _Device.get_default_device()
-        except RuntimeError:
-            self.with_device_stack = None
-        _Device.set_default_device(self)
-        return self
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        _Device.set_default_device(self.with_device_stack)
-        return False
 
     def new_tensor(self, shape, float k = 0):
         return wrapTensor(self.wrapped.new_tensor(normShape(shape).wrapped, k))

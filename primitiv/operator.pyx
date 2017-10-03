@@ -5,6 +5,7 @@ from primitiv.device cimport wrapDevice, _Device
 from primitiv.shape cimport _Shape, normShape
 from primitiv.graph cimport _Graph, wrapNode, Node, _Node
 from primitiv.parameter cimport _Parameter
+from primitiv.default_scope cimport _DefaultScopeDevice
 
 from utils cimport ndarray_to_vector, ndarray_to_vector_unsigned
 
@@ -18,7 +19,7 @@ class _operators:
     def input(shape = None, data = None, _Device device = None, _Parameter param = None, _Graph g = None):
         if isinstance(data, np.ndarray) and param is None:
             if device == None:
-                device = _Device.get_default_device()
+                device = _DefaultScopeDevice.get()
             if data.dtype != np.float32:
                 raise TypeError("numpy.ndarray must be constructed from float32 data")
             if shape is None:
@@ -29,7 +30,7 @@ class _operators:
                 return wrapNode(Node_input_vector(normShape(shape).wrapped, ndarray_to_vector(data), device.wrapped[0]))
         elif shape is not None and data is not None and param is None:
             if device == None:
-                device = _Device.get_default_device()
+                device = _DefaultScopeDevice.get()
             if g != None:
                 return wrapNode(Node_input_vector(normShape(shape).wrapped, <vector[float]> data, device.wrapped[0], g.wrapped[0]))
             else:

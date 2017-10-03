@@ -1,9 +1,10 @@
 from libcpp.vector cimport vector
 from libcpp cimport bool
 
-from primitiv.device cimport _Device, wrapDevice, get_default_device
+from primitiv.device cimport _Device, wrapDevice
 from primitiv.tensor cimport wrapTensor
 from primitiv.shape cimport wrapShape, normShape
+from primitiv.default_scope cimport DefaultScopeDevice_get, DefaultScopeGraph_get
 
 import numpy as np
 
@@ -19,22 +20,22 @@ cdef class _Parameter:
             if shape is None:
                 shape = _Shape(init.shape[1:], init.shape[0])
             if device == None:
-                self.wrapped = new Parameter(<string> name.encode("utf-8"), normShape(shape).wrapped, ndarray_to_vector(init), get_default_device())
+                self.wrapped = new Parameter(<string> name.encode("utf-8"), normShape(shape).wrapped, ndarray_to_vector(init), DefaultScopeDevice_get())
             else:
                 self.wrapped = new Parameter(<string> name.encode("utf-8"), normShape(shape).wrapped, ndarray_to_vector(init), device.wrapped[0])
         elif isinstance(init, list):
             if device == None:
-                self.wrapped = new Parameter(<string> name.encode("utf-8"), normShape(shape).wrapped, <vector[float]> init, get_default_device())
+                self.wrapped = new Parameter(<string> name.encode("utf-8"), normShape(shape).wrapped, <vector[float]> init, DefaultScopeDevice_get())
             else:
                 self.wrapped = new Parameter(<string> name.encode("utf-8"), normShape(shape).wrapped, <vector[float]> init, device.wrapped[0])
         elif isinstance(init, _Initializer):
             if device == None:
-                self.wrapped = new Parameter(<string> name.encode("utf-8"), normShape(shape).wrapped, (<_Initializer> init).wrapped[0], get_default_device())
+                self.wrapped = new Parameter(<string> name.encode("utf-8"), normShape(shape).wrapped, (<_Initializer> init).wrapped[0], DefaultScopeDevice_get())
             else:
                 self.wrapped = new Parameter(<string> name.encode("utf-8"), normShape(shape).wrapped, (<_Initializer> init).wrapped[0], device.wrapped[0])
         elif init == None:
             if device == None:
-                self.wrapped = new Parameter(<string> name.encode("utf-8"), normShape(shape).wrapped, get_default_device())
+                self.wrapped = new Parameter(<string> name.encode("utf-8"), normShape(shape).wrapped, DefaultScopeDevice_get())
             else:
                 self.wrapped = new Parameter(<string> name.encode("utf-8"), normShape(shape).wrapped, device.wrapped[0])
         else:
@@ -97,6 +98,6 @@ cdef class _Parameter:
     @staticmethod
     def load(str path, bool with_stats = True, _Device device = None):
         if device == None:
-            return wrapParameter(Parameter_load(<string> path.encode("utf-8"), with_stats, get_default_device()))
+            return wrapParameter(Parameter_load(<string> path.encode("utf-8"), with_stats, DefaultScopeDevice_get()))
         else:
             return wrapParameter(Parameter_load(<string> path.encode("utf-8"), with_stats, device.wrapped[0]))
