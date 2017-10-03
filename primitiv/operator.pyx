@@ -23,7 +23,7 @@ class _operators:
             if data.dtype != np.float32:
                 raise TypeError("numpy.ndarray must be constructed from float32 data")
             if shape is None:
-                shape = _Shape(data.shape[1:], data.shape[0])
+                shape = _Shape(data.shape[:-1], data.shape[-1])
             if g != None:
                 return wrapNode(Node_input_vector(normShape(shape).wrapped, ndarray_to_vector(data), device.wrapped[0], g.wrapped[0]))
             else:

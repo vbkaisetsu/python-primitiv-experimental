@@ -18,7 +18,7 @@ cdef class _Parameter:
             if init.dtype != np.float32:
                 raise TypeError("numpy.ndarray must be constructed from float32 data")
             if shape is None:
-                shape = _Shape(init.shape[1:], init.shape[0])
+                shape = _Shape(init.shape[:-1], init.shape[-1])
             if device == None:
                 self.wrapped = new Parameter(<string> name.encode("utf-8"), normShape(shape).wrapped, ndarray_to_vector(init), DefaultScopeDevice_get())
             else:
